@@ -7,6 +7,20 @@
       "quote": "Solo has el harness, no empieces nada del proyecto aún.",
       "scope": "Creación y validación inicial de archivos del harness. Permiso consumido al entregar.",
       "reason": "Preparación del desarrollo con gobierno, seguridad y continuidad"
+    },
+    {
+      "id": "2026-11-16-agents-integrity-review",
+      "reference": "Mensaje del usuario del 16 de noviembre de 2026 en esta conversación, posterior a la guía detallada para añadir Supabase",
+      "quote": "En el paso 1, obtengo: Cambios del harness pendientes de revisión aprobada: AGENTS.md, apruebo la revisión, cómo lo soluciono?",
+      "scope": "Aceptar la versión actual de AGENTS.md como referencia de integridad y registrar la aprobación. Ediciones limitadas a harness/approvals.json y harness/integrity.json.",
+      "reason": "Resolver la discrepancia de integridad de AGENTS.md confirmada por el verificador."
+    },
+    {
+      "id": "2026-11-16-supabase-skills-review",
+      "reference": "Mensaje del usuario en respuesta a los pendientes para iniciar el desarrollo con base de datos y OAuth",
+      "quote": "**Apruebo la revisión de las habilidades de Supabase y `skills-lock.json`, el registro de la aprobación y la actualización de integridad. Autorizo iniciar la base con Next.js y TypeScript. El acceso será cualquier cuenta de Google**",
+      "scope": "Vincular las altas en .agents/skills/supabase/ y .agents/skills/supabase-postgres-best-practices/ y el cambio en skills-lock.json a la referencia de integridad. Editar harness/approvals.json y harness/integrity.json. Iniciar la base con Next.js y TypeScript y admitir cualquier cuenta de Google.",
+      "reason": "Registrar las dos habilidades de Supabase instaladas y restablecer la verificación antes de iniciar el desarrollo autorizado."
     }
   ]
 }
