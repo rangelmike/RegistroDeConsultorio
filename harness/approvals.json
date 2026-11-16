@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "records": [
+    {
+      "id": "initial-creation",
+      "reference": "Mensaje del usuario que solicita crear el harness en esta conversación",
+      "quote": "Solo has el harness, no empieces nada del proyecto aún.",
+      "scope": "Creación y validación inicial de archivos del harness. Permiso consumido al entregar.",
+      "reason": "Preparación del desarrollo con gobierno, seguridad y continuidad"
+    }
+  ]
+}

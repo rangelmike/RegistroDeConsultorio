@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "features": [
+    {
+      "id": "foundation",
+      "name": "Decisiones y base del proyecto",
+      "description": "Decisiones y base del proyecto",
+      "dependencies": [],
+      "status": "not-started",
+      "acceptance": [
+        "Solicitud posterior de desarrollo identificada y aprobación del cambio al harness registrada antes de implementar.",
+        "Framework, servicios AWS, región, dominio permitido y valores numéricos de cuotas decididos.",
+        "Comandos ejecutables de verificación registrados en harness/checks.json con aprobación y comprobados en un entorno limpio."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "auth",
+      "name": "Google y página principal",
+      "description": "Google y página principal",
+      "dependencies": [
+        "foundation"
+      ],
+      "status": "not-started",
+      "acceptance": [
+        "Solo Google habilitado en proveedor y UI. Restricción de dominio resuelta.",
+        "Login, cancelación, logout, sesión expirada y entrada directa probados.",
+        "Validación del token y redirecciones internas verificadas en servidor."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "isolation",
+      "name": "Grupos y autorización Supabase",
+      "description": "Grupos y autorización Supabase",
+      "dependencies": [
+        "auth"
+      ],
+      "status": "not-started",
+      "acceptance": [
+        "Invitación por correo verificado, roles y revocación funcionales.",
+        "Pruebas reales con dos grupos, anónimo y usuario sin membresía para cada CRUD.",
+        "RLS, relaciones, vistas, RPC, Storage y Realtime revisados, con acceso denegado donde corresponda."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "quotas",
+      "name": "Cuotas de consultas y actualizaciones",
+      "description": "Cuotas de consultas y actualizaciones",
+      "dependencies": [
+        "isolation"
+      ],
+      "status": "not-started",
+      "acceptance": [
+        "Valores aprobados de cuota aplicados por dispositivo, usuario y grupo.",
+        "Pruebas concurrentes entre instancias, ventanas, rotación de dispositivo y fallo del limitador.",
+        "Llamadas directas al origen no eluden límites. 429 y Retry-After comprobados.",
+        "Lotes y reintentos consumen cuota según trabajo, con consumo de base acotado."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "records",
+      "name": "Pacientes y expedientes",
+      "description": "Pacientes y expedientes",
+      "dependencies": [
+        "quotas"
+      ],
+      "status": "not-started",
+      "acceptance": [
+        "CRUD aislado por grupo y rol con validación de servidor.",
+        "Paginación, tamaño máximo, errores sanitizados y auditoría comprobados.",
+        "Datos clínicos ausentes de logs, URLs y cachés públicas."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "appointments",
+      "name": "Agenda de citas",
+      "description": "Agenda de citas",
+      "dependencies": [
+        "records"
+      ],
+      "status": "not-started",
+      "acceptance": [
+        "Citas relacionadas con pacientes del grupo, permisos comprobados.",
+        "Zona horaria y política de solapamiento definidas y probadas bajo concurrencia."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "portability",
+      "name": "Importación JSON, exportación y recuperación",
+      "description": "Importación JSON, exportación y recuperación",
+      "dependencies": [
+        "records"
+      ],
+      "status": "not-started",
+      "acceptance": [
+        "JSON versionado, vista previa, validación, límites, duplicados y reintentos probados.",
+        "Importación parcial o fallida deja estado consistente y recuperable.",
+        "Exportación limitada al grupo y rol, incluida en cuotas.",
+        "Restauración con datos sintéticos y adjuntos comprobada."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "aws",
+      "name": "Despliegue AWS",
+      "description": "Despliegue AWS",
+      "dependencies": [
+        "appointments",
+        "portability"
+      ],
+      "status": "not-started",
+      "acceptance": [
+        "Autorización de despliegue, recursos concretos y presupuesto confirmados.",
+        "HTTPS, secretos de servidor, IAM mínimo, rutas OAuth y acceso al origen comprobados.",
+        "Pruebas funcionales y de seguridad en entorno desplegado, consumo y rollback verificados.",
+        "Respaldo, retención y preparación para datos reales acordados con responsable."
+      ],
+      "evidence": []
+    }
+  ]
+}
