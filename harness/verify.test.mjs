@@ -29,8 +29,22 @@ async function sealFixture(directory) {
 
 test('referencia válida y cierre de producto bloqueado sin controles', async (t) => {
   const directory = await fixture(t);
+  await writeFile(path.join(directory, 'harness/checks.json'), JSON.stringify({ schemaVersion: 1, productCommands: [] }));
+  await sealFixture(directory);
   assert.equal((await verify(directory)).productChecked, false);
   await assert.rejects(verify(directory, { product: true }), /registrar controles/);
+});
+
+test('ejecuta controles registrados y acredita producto solo si pasan', async (t) => {
+  const directory = await fixture(t);
+  const marker = path.join(directory, 'control-ejecutado.txt');
+  const checks = { schemaVersion: 1, productCommands: [
+    { command: process.execPath, args: ['-e', "require('node:fs').writeFileSync(process.argv[1], 'ok')", marker], timeoutMs: 5000 },
+  ] };
+  await writeFile(path.join(directory, 'harness/checks.json'), JSON.stringify(checks));
+  await sealFixture(directory);
+  assert.equal((await verify(directory, { product: true })).productChecked, true);
+  assert.equal(await readFile(marker, 'utf8'), 'ok');
 });
 
 for (const operation of ['edit', 'add', 'delete', 'manifest']) {

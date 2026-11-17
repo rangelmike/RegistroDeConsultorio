@@ -1,6 +1,6 @@
 import { createClient } from "../../../lib/supabase/server";
 
-function redirectTo(path: "/panel" | "/?login=error") {
+function redirectTo(path: "/panel" | "/?login=error" | "/panel/consultorios?setup=error") {
   return new Response(null, {
     status: 303,
     headers: { Location: path, "Cache-Control": "private, no-store" },
@@ -19,5 +19,7 @@ export async function GET(request: Request) {
     flowId ? { flowId } : undefined,
   );
 
-  return redirectTo(error ? "/?login=error" : "/panel");
+  if (error) return redirectTo("/?login=error");
+  const { error: claimError } = await supabase.rpc("claim_clinic_invitations");
+  return redirectTo(claimError ? "/panel/consultorios?setup=error" : "/panel");
 }

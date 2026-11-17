@@ -1,4 +1,59 @@
 {
   "schemaVersion": 1,
-  "productCommands": []
+  "productCommands": [
+    {
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "npm.cmd --prefix web run lint; exit $LASTEXITCODE"
+      ],
+      "timeoutMs": 300000
+    },
+    {
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "npm.cmd --prefix web run typecheck; exit $LASTEXITCODE"
+      ],
+      "timeoutMs": 300000
+    },
+    {
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "npm.cmd --prefix web run build; exit $LASTEXITCODE"
+      ],
+      "timeoutMs": 300000
+    },
+    {
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "npm.cmd --prefix web run test; exit $LASTEXITCODE"
+      ],
+      "timeoutMs": 300000
+    },
+    {
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "npm.cmd --prefix web run test:db; exit $LASTEXITCODE"
+      ],
+      "timeoutMs": 300000
+    },
+    {
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "npm.cmd --prefix web run test:browser; exit $LASTEXITCODE"
+      ],
+      "timeoutMs": 300000
+    }
+  ]
 }

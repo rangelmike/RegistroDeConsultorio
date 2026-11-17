@@ -1,0 +1,5 @@
+.env*
+!.env.example
+.local/
+playwright-report/
+test-results/

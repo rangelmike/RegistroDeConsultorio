@@ -67,19 +67,19 @@
     ".agents/skills/supabase/references/skill-feedback.md": "85e688b56623f9250d23b60ea950dee740fd537980fc72178fe185eab76742b7",
     ".agents/skills/supabase/SKILL.md": "44f4cfefb57751abf9288fb2920de621c748964de1301db627dea725e187bccf",
     "AGENTS.md": "73548b1e83e0e0cc870372142294fc770b94a9ed7265be10450b6383e3c93a42",
-    "feature_list.json": "751201967a4e2030e264f03788209e105c4640c372c8c8cfc367fd067ba068e6",
-    "harness/approvals.json": "98fee386a550dad77dbfd5c2655661e2a9a5c2881e9b05657368792e822f75b7",
-    "harness/checks.json": "b25fd50250ec735a0f4c803f836c4ee292123c526ffa666e400e37404ae7682f",
-    "harness/evidence.md": "22f2831e4da037d997b535517fb9c52a948f12b92031ac31a92c52cd57d7c3e1",
+    "feature_list.json": "2efcccc3849e28af6ab78ec8ccae417d07b14b9d69dd14e3a0d48e2c415cb583",
+    "harness/approvals.json": "0e0f8f93548bcadb3b8850dec819862f5352522dfd374307e18ae79ee9772557",
+    "harness/checks.json": "2c979d93e66b78d568ba8d5f0f5ea7009c2d19732ce987a75ecbf951a26d604e",
+    "harness/evidence.md": "c17169381b36341c4d068eb692152849d0ab5ca7890f43411f69c931c82fc83c",
     "harness/governance.md": "44f75d63ec0639cc4f2181b5b069bfe3d723daff9a4af52c9b863c9cde5bf1ca",
-    "harness/project.md": "f4aadd4c5604825ad56069a7ba597c40c4d8f17be63b8a53a8caa75869b80083",
+    "harness/project.md": "d8590787d0cd5d1b23ba27f3847e5e2775689fe83200dab403ac11cedd141be5",
     "harness/verify.mjs": "65d4fbfa9bd04a35ecd3a4d9adc20a659708377ab5de773c886ee13265d829f9",
-    "harness/verify.test.mjs": "fa318c90522408ba0c08624e64a370044ebf37b76f57d15fa615154d08cbd383",
+    "harness/verify.test.mjs": "845b0c1734d6abce7dc3af5f14c8bad81a1330aed62f3d784f601b44278ec713",
     "init.ps1": "5676bd3780aee792d5a6227f41096f329e6cbb5fc9e0276e581a37924aaa93ff",
     "init.sh": "2c80f931ab8898908cf4f574980a6cd3bff2cb886b221c2b8e59e41d1b7cdaeb",
-    "progress.md": "5d6ce3198732f4eb8462e99d7ed1d4541dd1566d28603db30b1c248b459f2cc6",
-    "session-handoff.md": "77e2d262f2103d7d8af5a82c19274ef99a124699c6f704492a6d014ce2ad2533",
+    "progress.md": "ce1838455aa00e48bbd6f0784679d2b598718ba6e105616a5b434eb3f2e70127",
+    "session-handoff.md": "9b58c66508ecc851bad4fbf28e57b594d1f246cde011ee50bfa5349e0f940ff8",
     "skills-lock.json": "706d939c027eac6b649079ae2ec7152bc42e13793dd1f7ce51b980cc1900017f"
   },
-  "digest": "af1392e0237e7fa3f3ed9c5a9ce3a8234e39068a87ac10d66c0223ce86d99d7d"
+  "digest": "d339d7e6af13d605b08206a3f43e8dde4ef127efd76aca5d74ed6edfee51f598"
 }

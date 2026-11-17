@@ -21,6 +21,27 @@
       "quote": "**Apruebo la revisión de las habilidades de Supabase y `skills-lock.json`, el registro de la aprobación y la actualización de integridad. Autorizo iniciar la base con Next.js y TypeScript. El acceso será cualquier cuenta de Google**",
       "scope": "Vincular las altas en .agents/skills/supabase/ y .agents/skills/supabase-postgres-best-practices/ y el cambio en skills-lock.json a la referencia de integridad. Editar harness/approvals.json y harness/integrity.json. Iniciar la base con Next.js y TypeScript y admitir cualquier cuenta de Google.",
       "reason": "Registrar las dos habilidades de Supabase instaladas y restablecer la verificación antes de iniciar el desarrollo autorizado."
+    },
+    {
+      "id": "2026-11-16-local-clinics",
+      "reference": "Mensaje del usuario en este chat que aprueba el lote tras explicar las restricciones de Docker, CLI y harness.",
+      "quote": "Apruebo el lote de cambios del harness y las decisiones propuestas para la implementación local",
+      "scope": "harness/project.md, feature_list.json, harness/checks.json, web/tests/, supabase/tests/, progress.md, session-handoff.md, harness/evidence.md, harness/approvals.json y harness/integrity.json. Base local Next.js/TypeScript, Google, consultorios lógicos aislados con RLS, propietario administrador e integrantes colaboradores. Sin despliegue ni migraciones remotas.",
+      "reason": "Registrar controles de producto, conciliar estado obsoleto y verificar aislamiento real antes de cerrar la base local."
+    },
+    {
+      "id": "2026-11-16-harness-test-fixture",
+      "reference": "Respuesta del usuario a la pregunta asíncrona que solicita añadir harness/verify.test.mjs al lote.",
+      "quote": "Sí, autorizo esa corrección y su registro",
+      "scope": "harness/verify.test.mjs: fixture sin controles explícito y caso de ejecución satisfactoria; harness/approvals.json e integrity.json.",
+      "reason": "La prueba anterior dependía accidentalmente de que el proyecto no tuviera controles registrados."
+    },
+    {
+      "id": "2026-11-16-session-cleanup",
+      "reference": "Último mensaje del usuario de esta sesión solicitando limpieza, ajustes mínimos, estabilidad y cierre; continúa el lote explícito ya aprobado para estado y pruebas.",
+      "quote": "Haz una comprobación de limpieza del estado del proyecto, haz los ajustes mínimos necesarios para dejar el proyecto en un estado estable y dado eso, termina la sesión",
+      "scope": "Cierre del lote local aprobado: supabase/tests/clinics.test.sql, harness/project.md, harness/evidence.md, harness/approvals.json, harness/integrity.json, progress.md, feature_list.json y session-handoff.md. Verificación de controles existentes y preservación de datos y credenciales del usuario.",
+      "reason": "Corregir una aserción que asumía una base vacía y conciliar el relevo con Google ya habilitado. Sin ampliar funciones, reset, operaciones remotas ni despliegue."
     }
   ]
 }

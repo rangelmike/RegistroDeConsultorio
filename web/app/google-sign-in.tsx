@@ -29,7 +29,8 @@ export function GoogleSignIn() {
 
   return (
     <>
-      <button type="button" onClick={signIn} disabled={pending}>
+      <button className="button google-button" type="button" onClick={signIn} disabled={pending}>
+        <span className="google-g" aria-hidden="true">G</span>
         {pending ? "Abriendo Google…" : "Continuar con Google"}
       </button>
       {failed && <p role="alert">No se pudo abrir Google. Inténtalo de nuevo.</p>}

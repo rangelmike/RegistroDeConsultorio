@@ -2,9 +2,9 @@
 
 ## Fase y decisiones
 
-Aplicación pendiente de autorización. Supabase y AWS son requisitos. Framework, servicios AWS, región y mecanismo concreto de cuotas se decidirán antes de implementarlos. Objetivo económico de planes gratuitos con límites verificados al configurar proveedores.
+Base local autorizada el 16 de noviembre de 2026: Next.js y TypeScript, Supabase para autenticación y datos. AWS permanece como destino futuro; servicios y región se decidirán en la fase aws. Las cuotas clínicas y sus valores se decidirán en la fase quotas, antes de habilitar datos clínicos. Objetivo económico de planes gratuitos con límites verificados al configurar proveedores.
 
-Se interpreta Gmail como inicio con Google. Confirmar antes de implementar si se exige además dominio @gmail.com, pues Google admite cuentas con otros dominios.
+Se admite cualquier cuenta de Google con correo verificado, sin restricción a @gmail.com.
 
 ## Autenticación y navegación
 
@@ -54,3 +54,25 @@ Confirmar versiones al implementar.
 - [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security)
 - [Protección de APIs](https://supabase.com/docs/guides/api/securing-your-api)
 - [Límites de Auth](https://supabase.com/docs/guides/auth/rate-limits)
+
+## Base local y consultorios (lote autorizado 2026-11-16)
+
+- Una función foundation agrupa base, autenticación y aislamiento local, antes separados en foundation/auth/isolation. Una sola función activa. La verificación real de Google queda pendiente si faltan credenciales o interacción del usuario; no se sustituye por mocks ni se marca done.
+- Inicio exclusivo para Google; navegación autenticada con Agenda, Expedientes y Consultorios. Agenda y Expedientes son páginas de estado vacío, sin operaciones clínicas hasta sus fases y cuotas. Selector arriba a la izquierda; selección no concede permisos.
+- Cada consultorio es un espacio lógico en una misma base Postgres; eliminación transaccional con cascada de sus datos asociados. No se aprovisiona una base o proyecto por consultorio.
+- Creador propietario y miembro automático. Solo el propietario cambia nombre, gestiona integrantes o elimina el consultorio. No puede expulsarse ni transferir propiedad en esta fase. Miembros comparten permisos CRUD sobre futuros datos del consultorio, sujetos a cuotas clínicas antes de habilitarlos.
+- Correos verificados de Google: altas para cuentas existentes y reservas pendientes para quienes aún no se registran, vinculadas al autenticarse. No se envían emails en esta fase. Revocación consultada en base, no en claims de membresía cacheados.
+- RPC de escritura transaccionales; funciones privilegiadas en esquema privado, search_path fijo, identidad y permisos comprobados dentro de cada operación. Acceso anónimo y DML directo denegados. Sin endpoints clínicos, Storage ni publicaciones Realtime para estas tablas.
+- Pruebas en Postgres local real con datos sintéticos: dos consultorios, propietario, miembro, ajeno, anónimo, invitaciones, cambios de pertenencia, borrado y llamadas directas. Revisar permisos, RLS y advisors.
+- Controles: lint, typecheck, build, pruebas unitarias, base real y navegación local. Docker y CLI pueden requerir ejecución fuera del sandbox; nunca destinos remotos.
+
+## Operación local de esta base
+
+- CLI verificado: 2.117.0; Postgres 17 en Docker. `supabase start -x realtime,storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor` desde la raíz inicia el entorno de pruebas. Los comandos de base deben llevar `--local`.
+- `npm --prefix web run dev:local` lee la URL y clave publicable locales en memoria y arranca Next.js, preservando web/.env.local existente. `npm --prefix web run dev` sigue usando la configuración habitual del usuario.
+- Historial canónico: supabase/migrations/. `supabase db reset --local --no-seed` reconstruye la base local y borra sus datos; usar solo en el entorno de pruebas de esta tarea.
+- Google local está habilitado en supabase/config.toml y confirmado en /auth/v1/settings al cierre del 2026-11-16. Las variables SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID y SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET se mantienen en el .env de la raíz para Supabase CLI; web/.env.local corresponde a Next.js. Ambos archivos están excluidos de Git. El consentimiento y la renovación reales de Google aún no han sido verificados por el agente. Callback de Google: http://127.0.0.1:54321/auth/v1/callback; retorno de la aplicación: http://127.0.0.1:3000/auth/callback o http://localhost:3000/auth/callback. Reiniciar la pila local después de configurarlo. Ningún otro proveedor se habilita para uso de producto.
+- La autorización de datos exige sesión OAuth vigente en auth.sessions, identidad Google y correo verificado mantenidos por Auth. No basta con editar metadata ni conservar un JWT tras cerrar sesión. El test de navegador usa una sesión OAuth sintética firmada únicamente con la clave local, en memoria; no acredita el consentimiento real de Google.
+- Límites administrativos: nombre de 1–100 caracteres, 50 correos por operación, 100 integrantes por consultorio y 20 consultorios creados por usuario. Son validaciones de tamaño del módulo; no sustituyen las cuotas clínicas pendientes.
+- Auditoría privada: actor, consultorio, operación, entidad y fecha; sin nombres, correos ni contenido clínico. Los identificadores de auditoría permanecen tras borrar el consultorio. Retención de producción pendiente en aws.
+- Pruebas requieren Node 24, Docker, Supabase CLI y Microsoft Edge en Windows. Los fixtures son sintéticos, las pruebas SQL usan rollback y las de navegador eliminan sus cuentas y consultorios. Las capturas en .local/ están ignoradas por Git.

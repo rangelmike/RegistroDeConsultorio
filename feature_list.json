@@ -3,53 +3,38 @@
   "features": [
     {
       "id": "foundation",
-      "name": "Decisiones y base del proyecto",
-      "description": "Decisiones y base del proyecto",
+      "name": "Base local: Google y administración de consultorios",
+      "description": "Base Next.js/TypeScript, navegación y consultorios con membresías verificadas y aislamiento Supabase.",
       "dependencies": [],
-      "status": "not-started",
+      "status": "in-progress",
       "acceptance": [
-        "Solicitud posterior de desarrollo identificada y aprobación del cambio al harness registrada antes de implementar.",
-        "Framework, servicios AWS, región, dominio permitido y valores numéricos de cuotas decididos.",
-        "Comandos ejecutables de verificación registrados en harness/checks.json con aprobación y comprobados en un entorno limpio."
+        "Autorización del lote registrada; Next.js/TypeScript y cualquier cuenta de Google documentados. AWS y cuotas clínicas conservados en sus fases.",
+        "Inicio exclusivo con Google, validación de sesión en servidor y navegación autenticada. Login real, cancelación, expiración y logout verificados; pendientes externos explícitos impiden done.",
+        "Creación, edición, eliminación, altas y bajas por correo verificado, creador automático y selector persistente implementados por sus puntos de entrada normales.",
+        "Propietario administra; miembros comparten datos del consultorio. Pruebas reales de RLS con dos grupos, ajeno y anónimo, revocación con sesión activa, privilegios, RPC y cascada.",
+        "Comandos registrados de lint, tipos, build y pruebas locales pasan; no se habilitan datos clínicos ni despliegue."
       ],
-      "evidence": []
-    },
-    {
-      "id": "auth",
-      "name": "Google y página principal",
-      "description": "Google y página principal",
-      "dependencies": [
-        "foundation"
-      ],
-      "status": "not-started",
-      "acceptance": [
-        "Solo Google habilitado en proveedor y UI. Restricción de dominio resuelta.",
-        "Login, cancelación, logout, sesión expirada y entrada directa probados.",
-        "Validación del token y redirecciones internas verificadas en servidor."
-      ],
-      "evidence": []
-    },
-    {
-      "id": "isolation",
-      "name": "Grupos y autorización Supabase",
-      "description": "Grupos y autorización Supabase",
-      "dependencies": [
-        "auth"
-      ],
-      "status": "not-started",
-      "acceptance": [
-        "Invitación por correo verificado, roles y revocación funcionales.",
-        "Pruebas reales con dos grupos, anónimo y usuario sin membresía para cada CRUD.",
-        "RLS, relaciones, vistas, RPC, Storage y Realtime revisados, con acceso denegado donde corresponda."
-      ],
-      "evidence": []
+      "evidence": [
+        {
+          "command": "node harness/verify.mjs --product",
+          "result": "passed",
+          "date": "2026-11-16",
+          "environment": "Windows; Node 24.21.0; Next 16.4.6; Supabase CLI 2.117.0; Postgres 17 Docker; Edge headless. Sesiones OAuth sintéticas locales."
+        },
+        {
+          "command": "node harness/verify.mjs --product (comprobación de limpieza y cierre)",
+          "result": "passed",
+          "date": "2026-11-16",
+          "environment": "Windows local; Google habilitado en config y servicio; 3 pruebas unitarias, 57 pgTAP y navegador sintético. Datos locales existentes preservados; OAuth Google real sigue pendiente de verificación."
+        }
+      ]
     },
     {
       "id": "quotas",
       "name": "Cuotas de consultas y actualizaciones",
       "description": "Cuotas de consultas y actualizaciones",
       "dependencies": [
-        "isolation"
+        "foundation"
       ],
       "status": "not-started",
       "acceptance": [
