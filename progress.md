@@ -1,23 +1,24 @@
 # Progreso
 
-## Current State
+## Cierre estable de la sesión — 18 de noviembre de 2026
 
-- Current Objective — sesión cerrada tras comprobación de limpieza y estabilidad de la base local.
-- Active Feature — foundation sigue in-progress exclusivamente por la validación completa de Google real pendiente; no se marca done.
-- What is done — administración local de consultorios, selector, integrantes por correo, roles, RLS, revocación y migraciones verificadas. Agenda y Expedientes siguen como páginas informativas.
+- Todos los ajustes finales de expedientes y la simplificación están implementados y verificados. Fechas dd/mm/yyyy con Hoy, vista de lectura en tres secciones, importación individual que abre Ver expediente, preguntas médicas, valores predeterminados y restas calculadas.
+- node harness/verify.mjs --product pasó después de detener el servidor de desarrollo y regenerar web/.next, que tenía un archivo bloqueado. Pasaron lint, tipos, build, 5 pruebas unitarias, 95 comprobaciones SQL, concurrencia y Edge. Las 8 pruebas del harness también pasaron.
+- supabase db advisors --local --fail-on warn no reportó hallazgos. Las cinco migraciones constan en la base local. git diff --check pasó.
+- Google real permanece pendiente por elección explícita del usuario: Prefiero dejar Google pendiente. Se observó la pantalla real del proveedor en la pestaña integrada. Foundation continúa blocked. Las pruebas automáticas emplean sesiones sintéticas locales.
+- Cierre y commit local autorizados mediante el mensaje Tienes autorización para resolver los pendientes para dejar el proyecto en un estado estable. Registro 2026-11-18-stable-session-close en harness/approvals.json.
 
-## Verification Evidence
+## Registro previo de la sesión
 
-- 2026-11-16, Windows local: node harness/verify.mjs --product pasó lint, typecheck, build, 3 pruebas unitarias, 57 comprobaciones pgTAP y flujo completo de navegador.
-- Harness: 8 pruebas aprobadas y referencia de 79 archivos íntegra.
-- Advisors locales sin hallazgos; dos migraciones aplicadas. Dependencias y lockfile coinciden; git diff --check pasa; sin conflictos sin resolver.
-- Google está habilitado en config.toml y confirmado mediante /auth/v1/settings. .env raíz presente y excluido de Git; web/.env.local preservado.
-- La prueba de cascada ahora consulta solo su consultorio sintético y funciona con datos existentes. Un consultorio local conservado antes/después; fixtures del navegador retirados.
+## Estado del 18 de noviembre de 2026
 
-## Blockers
+- Expedientes y cuotas locales implementados y verificados. Consulta por nombre, edición, odontogramas, evolución y cuenta, selección entre páginas, eliminación y JSON individual o múltiple. Nombre y teléfono son los únicos campos clínicos obligatorios.
+- Los archivos JSON incluyen versión e identificadores portables. La vista previa consulta duplicados y valida el esquema. Reimportar un expediente idéntico lo omite. Un conflicto cancela el lote. La edición comprueba la revisión para impedir sobrescribir cambios concurrentes.
+- Sesión real de Google iniciada hasta la pantalla del proveedor. La aplicación admite identidades Google con correo verificado de cualquier dominio. Consentimiento, retorno y renovación reales pendientes. Foundation conserva el estado bloqueado.
+- El intercambio JSON forma parte de records. El respaldo administrativo, los adjuntos y la restauración ampliada siguen en portability. Agenda y despliegue quedan pendientes.
 
-Consentimiento, callback exitoso y renovación de sesión reales de Google no observados por el agente. Las pruebas OAuth sintéticas no sustituyen esta verificación. No se aplicaron cambios remotos ni deploy.
+## Evidencia
 
-## Next Session
+Windows, Node 24, Supabase y PostgreSQL 17 locales, Edge. El control de producto pasó lint, tipos, build, 5 pruebas unitarias, 95 comprobaciones SQL, concurrencia con conexiones independientes y pruebas de navegador con datos sintéticos. Las cinco migraciones constan en el historial local. Los advisors locales informaron cero hallazgos.
 
-Leer AGENTS.md y ejecutar node harness/verify.mjs. Retomar con npm --prefix web run dev:local y comprobar Google real antes de cerrar foundation. El trabajo permanece en el árbol local sin commit. No borrar los archivos nuevos ni ejecutar reset para limpiar Git. Cuotas clínicas pendientes antes de implementar expedientes.
+Lote autorizado en la conversación del 18 de noviembre y registrado en harness/approvals.json. Detalles reproducibles en harness/evidence.md.

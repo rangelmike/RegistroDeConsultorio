@@ -38,5 +38,14 @@ export async function syntheticActor(config,label) {
 export function cleanupActors(actors) {
   if(!actors.length) return;
   const ids=actors.map(a=>`'${a.id}'`).join(',');
-  sql(`begin; delete from public.clinics where owner_id in (${ids}); delete from clinic_private.audit_events where actor_id in (${ids}); delete from auth.users where id in (${ids}); commit;`);
+  sql(`begin;
+    delete from clinic_private.clinical_usage where
+      (scope='user' and principal in (${ids})) or
+      (scope='device' and principal in (select id from auth.sessions where user_id in (${ids}))) or
+      (scope='device' and principal = any(array[${actors.filter(a=>a.session).map(a=>`'${a.session}'`).join(',')}]::uuid[])) or
+      (scope='clinic' and principal in (select clinic_id from clinic_private.audit_events where actor_id in (${ids})));
+    delete from public.clinics where owner_id in (${ids});
+    delete from clinic_private.audit_events where actor_id in (${ids});
+    delete from auth.users where id in (${ids});
+    commit;`);
 }

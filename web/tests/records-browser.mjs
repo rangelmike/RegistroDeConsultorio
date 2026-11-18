@@ -1,0 +1,141 @@
+import { expect } from '@playwright/test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+
+export async function verifyRecords(page,memberPage,clinicId) {
+  const button=(name,scope=page)=>scope.getByRole('button',{name,exact:true});
+  const row=(name)=>page.locator('.record-rows li').filter({has:page.getByText(name,{exact:true})});
+  const upload=async data=>page.getByLabel('Archivo JSON').setInputFiles({name:'sintetico.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(data))});
+  async function exported(control) {
+    const wait=page.waitForEvent('download');
+    await control.click();
+    return JSON.parse(await readFile(await (await wait).path(),'utf8'));
+  }
+  await button('Crear expediente').click();
+  const form=page.locator('.record-editor');
+  await form.getByText('Antecedentes personales o familiares',{exact:true}).click();
+  await expect(form.locator('label').filter({hasText:'Diabetes'}).locator('select')).toHaveValue('Sin antecedente');
+  await form.getByText('Tejidos',{exact:true}).click();
+  await expect(form.locator('label').filter({hasText:'Labios'}).locator('select')).toHaveValue('Normal');
+  await expect(form.getByText('Firmas',{exact:true})).toHaveCount(0);
+  await form.getByText('Historia médica',{exact:true}).click();
+  await expect(form.getByLabel('¿Padece actualmente alguna enfermedad? ¿Cuál?')).toBeVisible();
+  await form.getByLabel('Nombre del paciente').fill('Paciente sintético A');
+  await button('Crear expediente',form).click();
+  await expect(form.getByLabel('Teléfono')).toBeFocused();
+  await form.getByLabel('Teléfono').fill('5550100001');
+  await form.getByText('Identificación y contacto',{exact:true}).click();
+  const historyDate=form.locator('label').filter({hasText:'Fecha de la historia'});
+  await historyDate.getByRole('button',{name:'Hoy',exact:true}).click();
+  await expect(historyDate.locator('input')).toHaveValue(/\d{2}\/\d{2}\/\d{4}/);
+  await historyDate.locator('input').fill('18/11/2026');
+  await button('Crear expediente',form).click();
+  await expect(row('Paciente sintético A')).toBeVisible();
+
+  await button('Editar',row('Paciente sintético A')).click();
+  await form.getByLabel('Nombre del paciente').fill('Paciente sintético Alfa');
+  await form.locator('summary').filter({hasText:'Diagnóstico y seguimiento'}).click();
+  await form.getByLabel('Diagnóstico',{exact:true}).fill('Hallazgo sintético');
+  await form.getByText('Odontogramas y presupuesto por pieza',{exact:true}).click();
+  await button('Pieza 55',form).click();
+  await form.getByLabel('Hallazgo por pieza').fill('Marca sintética');
+  await form.getByLabel('Presupuesto',{exact:true}).fill('500.50');
+  await form.getByText('Evolución y estado de cuenta',{exact:true}).click();
+  await button('Añadir movimiento',form).click();
+  await form.getByLabel('Costo total',{exact:true}).fill('500.50');
+  await form.getByLabel('Anticipo',{exact:true}).fill('200');
+  await expect(form.locator('.account-row output')).toHaveText('300.50');
+  await expect(form.locator('.account-totals')).toContainText('300.50');
+  await button('Guardar cambios',form).click();
+
+  const single=await exported(button('Exportar JSON',row('Paciente sintético Alfa')));
+  assert.equal(single.expedientes[0].campos.fecha,'2026-11-18');
+  await button('Ver expediente',row('Paciente sintético Alfa')).click();
+  const viewer=page.locator('.record-viewer');
+  await expect(viewer.getByText('18/11/2026',{exact:true})).toBeVisible();
+  await button('Datos dentales',viewer).click();
+  await expect(viewer.getByText('Hallazgo sintético',{exact:true})).toBeVisible();
+  await button('Pieza 55',viewer).click();
+  await expect(viewer.getByText('Marca sintética',{exact:true})).toBeVisible();
+  await button('Pagos',viewer).click();
+  await expect(viewer.locator('.payments-table')).toContainText('300.50');
+  await page.setViewportSize({width:390,height:844});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await page.setViewportSize({width:1440,height:1100});
+  await button('Volver a la consulta',viewer).click();
+  assert.equal(single.expedientes[0].campos.diagnostico,'Hallazgo sintético');
+  assert.equal(single.expedientes[0].campos.diabetes,'Sin antecedente');
+  assert.equal(single.expedientes[0].campos.labios,'Normal');
+  assert.equal(single.expedientes[0].odontograma['55'].presupuesto,'500.50');
+  assert.equal(single.expedientes[0].evolucion[0].resta,undefined);
+  await upload({version:1,expedientes:[{...single.expedientes[0],telefono:'5550100099'}]});
+  await expect(page.locator('.record-error')).toContainText('Expediente 1. Ya existe ese identificador');
+  await expect(button('Confirmar importación')).toHaveCount(0);
+  await button('Eliminar',row('Paciente sintético Alfa')).click();
+  await button('Cancelar eliminación').click();
+  await button('Eliminar',row('Paciente sintético Alfa')).click();
+  await button('Confirmar eliminación').click();
+  await expect(row('Paciente sintético Alfa')).toHaveCount(0);
+
+  await button('Crear expediente').click();
+  await upload(single);
+  await expect(page.getByText('Vista previa',{exact:true})).toBeVisible();
+  await button('Confirmar importación').click();
+  await expect(viewer.getByRole('heading',{name:'Paciente sintético Alfa',exact:true})).toBeVisible();
+  await expect(viewer.getByText('5550100001',{exact:true})).toBeVisible();
+  await expect(button('Editar expediente',viewer)).toBeVisible();
+  await button('Volver a la consulta',viewer).click();
+  await expect(row('Paciente sintético Alfa')).toBeVisible();
+  const multi={version:1,expedientes:[...single.expedientes,{id:randomUUID(),nombre:'Paciente sintético Beta',telefono:'5550100002'}]};
+  await upload(multi);
+  await expect(page.getByText('Por crear: 1. Duplicados idénticos: 1.')).toBeVisible();
+  await button('Confirmar importación').click();
+  await expect(row('Paciente sintético Beta')).toBeVisible();
+  await page.getByLabel('Buscar por nombre').fill('Alfa');
+  await expect(row('Paciente sintético Beta')).toHaveCount(0);
+  await expect(row('Paciente sintético Alfa')).toBeVisible();
+  await page.getByLabel('Buscar por nombre').fill('');
+  await expect(row('Paciente sintético Beta')).toBeVisible();
+  await row('Paciente sintético Alfa').getByRole('checkbox').check();
+  await button('Seleccionar todos').click();
+  const both=await exported(button('Exportar selección (2)'));
+  assert.deepEqual(both.expedientes.sort((a,b)=>a.id.localeCompare(b.id)),multi.expedientes.sort((a,b)=>a.id.localeCompare(b.id)));
+  await button('Eliminar selección (2)').click();
+  await button('Confirmar eliminación').click();
+  await expect(row('Paciente sintético Beta')).toHaveCount(0);
+  await upload(both);
+  await button('Confirmar importación').click();
+  await expect(row('Paciente sintético Beta')).toBeVisible();
+  await upload([{nombre:'Sin teléfono'}]);
+  await expect(page.locator('.record-error')).toContainText('Expediente 1');
+  await expect(button('Confirmar importación')).toHaveCount(0);
+
+  await memberPage.getByRole('link',{name:'Expedientes',exact:true}).click();
+  await expect(memberPage.getByText('Paciente sintético Alfa',{exact:true})).toBeVisible();
+  const series=Array.from({length:11},(_,i)=>({nombre:'Serie sintética '+i,telefono:'000'}));
+  await memberPage.getByLabel('Archivo JSON').setInputFiles({name:'serie.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(series))});
+  await button('Confirmar importación',memberPage).click();
+  await expect(memberPage.getByRole('status').filter({hasText:'Creados: 11'})).toBeVisible();
+  await memberPage.getByLabel('Buscar por nombre').fill('Serie sintética');
+  await expect(memberPage.locator('.record-rows li').filter({hasText:'Serie sintética'})).toHaveCount(10);
+  await button('Siguiente',memberPage).click();
+  await expect(memberPage.locator('.record-rows li')).toHaveCount(1);
+  await button('Seleccionar todos',memberPage).click();
+  await expect(button('Exportar selección (11)',memberPage)).toBeVisible();
+  await page.setViewportSize({width:390,height:844});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await page.setViewportSize({width:1440,height:1100});
+
+  // The complete batch is charged before any requested clinical rows are read.
+  const quota=await memberPage.evaluate(async target=>{
+    const call=()=>fetch('/panel/expedientes/operacion',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({target,action:'preview',payload:{version:1,expedientes:Array.from({length:50},(_,i)=>({
+        id:crypto.randomUUID(),nombre:'Prueba '+i,telefono:'000'}))}})});
+    for(let i=0;i<4;i++){const r=await call();if(r.status===429)return Number(r.headers.get('Retry-After'));}
+    return 0;
+  },clinicId);
+  assert.ok(quota>=1 && quota<=60);
+  await memberPage.getByRole('link',{name:'Consultorios',exact:true}).click();
+  console.log('PASS expedientes E2E: alta mínima, edición dental y cuenta, búsqueda, selección, borrado confirmado, JSON individual y múltiple, duplicados, miembro, móvil y HTTP 429.');
+}

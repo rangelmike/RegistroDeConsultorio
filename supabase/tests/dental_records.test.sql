@@ -1,0 +1,60 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+set local search_path=public,extensions;
+select no_plan();
+create temp table dental_people(n int, id uuid, email text);
+insert into dental_people select n,gen_random_uuid(),'dental'||n||'@example.test' from generate_series(1,3)n;
+insert into auth.users(id,email,email_confirmed_at) select id,email,now() from dental_people;
+insert into auth.identities(id,provider_id,user_id,provider,identity_data)
+  select gen_random_uuid(),id::text,id,'google',jsonb_build_object('email',email,'email_verified',true) from dental_people;
+insert into auth.sessions(id,user_id) select id,id from dental_people;
+create temp table dental_fixture as select gen_random_uuid() a, gen_random_uuid() b,
+  jsonb_build_object('id',gen_random_uuid(),'nombre','Sintético','telefono','555') doc;
+insert into public.clinics(id,name,owner_id) select a,'Prueba A',id from dental_fixture,dental_people where n=1
+ union all select b,'Prueba B',id from dental_fixture,dental_people where n=3;
+insert into public.clinic_access(clinic_id,user_id,email) select case when n=3 then b else a end,id,email from dental_fixture,dental_people;
+grant select on dental_fixture,dental_people to authenticated;
+create function pg_temp.dental_actor(who int) returns void language sql as $$
+  select set_config('request.jwt.claims',jsonb_build_object('sub',id,'session_id',id,'amr','[{"method":"oauth"}]'::jsonb)::text,true) from dental_people where n=who;
+$$;
+create function pg_temp.batch(op text, docs jsonb, version_number int default 1) returns jsonb language sql as $$
+  select public.dental_operation(a,op,jsonb_build_object('version',1,'expedientes',docs,'revision',version_number)) from dental_fixture;
+$$;
+set local role authenticated;
+select pg_temp.dental_actor(1);
+select is((select pg_temp.batch('preview',jsonb_build_array(doc))->>'added' from dental_fixture),'1','preview validates a minimal record');
+select is((select public.dental_operation(a,'list','{}') from dental_fixture),'[]'::jsonb,'preview writes no clinical rows');
+select is((select pg_temp.batch('import',jsonb_build_array(doc))->>'added' from dental_fixture),'1','name and phone suffice');
+select is((select pg_temp.batch('import',jsonb_build_array(doc))->>'duplicates' from dental_fixture),'1','identical retry skipped');
+select is((select pg_temp.batch('import',jsonb_build_array(doc - 'telefono'))->>'message' from dental_fixture),'Invalid record','phone required');
+select is((select pg_temp.batch('update',jsonb_build_array(doc || '{"nombre":"  "}'))->>'message' from dental_fixture),'Invalid record','name stays required on edit');
+select is((select pg_temp.batch('import',jsonb_build_array(doc || '{"campos":{"desconocido":"x"}}'))->>'message' from dental_fixture),'Invalid record','unknown field rejected');
+select is((select pg_temp.batch('import',jsonb_build_array(doc || jsonb_build_object('id',gen_random_uuid()),doc || '{"telefono":"123"}'))->>'message' from dental_fixture),'Duplicate differs','conflicting batch rejected');
+select is((select jsonb_array_length(public.dental_operation(a,'list','{}')) from dental_fixture),1,'conflict leaves no partial inserts');
+reset role;
+select is((select minute_used from clinic_private.clinical_usage where scope='user' and writing and principal=(select id from dental_people where n=1)),7,'failed and retried records consume budget');
+set local role authenticated;
+select pg_temp.dental_actor(2);
+select lives_ok($$select pg_temp.batch('update',jsonb_build_array(doc || '{"campos":{"sexo":"Femenino"}}')) from dental_fixture$$,'clinic member can edit');
+select is((select pg_temp.batch('update',jsonb_build_array(doc),1)->>'message' from dental_fixture),'Record changed','stale edit cannot overwrite');
+select throws_ok($$select public.dental_operation(b,'list','{}') from dental_fixture$$,'42501','Access denied','other clinic invisible');
+select pg_temp.dental_actor(3);
+select throws_ok($$select public.dental_operation(a,'read',jsonb_build_object('ids',jsonb_build_array(doc->>'id'))) from dental_fixture$$,'42501','Access denied','outside clinic cannot export');
+select throws_ok($$select public.dental_operation(a,'delete',jsonb_build_object('ids',jsonb_build_array(doc->>'id'))) from dental_fixture$$,'42501','Access denied','outside clinic cannot delete');
+select is((select public.dental_operation(b,'list','{}') from dental_fixture),'[]'::jsonb,'groups isolated');
+select throws_ok('select * from clinic_private.dental_records','42501',null,'table read blocked');
+select throws_ok('delete from clinic_private.dental_records','42501',null,'direct delete blocked');
+reset role;
+delete from public.clinic_access where user_id=(select id from dental_people where n=2);
+set local role authenticated;
+select pg_temp.dental_actor(2);
+select throws_ok($$select public.dental_operation(a,'list','{}') from dental_fixture$$,'42501','Access denied','revoked member denied with same session');
+set local role anon;
+select ok(not has_function_privilege('anon','public.dental_operation(uuid,text,jsonb)','execute'),'anonymous cannot call RPC');
+reset role;
+select ok((select relrowsecurity from pg_class where oid='clinic_private.dental_records'::regclass),'private table uses RLS');
+select ok(exists(select from clinic_private.audit_events where clinic_id=(select a from dental_fixture) and operation='record_update'),'clinical edit audited');
+delete from public.clinics where id=(select a from dental_fixture);
+select is((select count(*) from clinic_private.dental_records where clinic_id=(select a from dental_fixture)),0::bigint,'clinic deletion removes its records');
+select * from finish();
+rollback;

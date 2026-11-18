@@ -1,2 +1,13 @@
 import { getClinics } from "../../../lib/clinics";
-export default async function Expedientes() { const { active } = await getClinics(); return <><div className="page-heading"><div><span className="eyebrow">TU ESPACIO DE TRABAJO</span><h1>Expedientes<span className="heading-dot">.</span></h1><p>{active?.name ?? "Selecciona o crea un consultorio para comenzar."}</p></div></div><section className="empty-state"><span className="empty-icon">▤</span><h2>La información de tus pacientes, en su lugar</h2><p>Los expedientes estarán disponibles en una próxima etapa. Por ahora, puedes gestionar los integrantes de tu consultorio.</p><a href="/panel/consultorios" className="button secondary">Ir a Consultorios</a></section></>; }
+import { RecordsWorkspace } from "./records-workspace";
+import "./records.css";
+
+export default async function Expedientes() {
+  const {active,unavailable}=await getClinics();
+  return <>
+    <div className="page-heading"><div><h1>Expedientes<span className="heading-dot">.</span></h1><p>{active?.name}</p></div></div>
+    {active ? <RecordsWorkspace key={active.id} clinic={active.id}/> :
+      <section className="empty-state"><h2>{unavailable?"No se pudieron cargar tus consultorios":"Selecciona o crea un consultorio"}</h2>
+        <a href="/panel/consultorios" className="button secondary">Ir a Consultorios</a></section>}
+  </>;
+}

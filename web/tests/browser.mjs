@@ -1,6 +1,7 @@
 import { chromium, expect } from '@playwright/test';
+import { verifyRecords } from './records-browser.mjs';
 import { spawn } from 'node:child_process';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { localStack, syntheticActor, cleanupActors, root } from './local-stack.mjs';
 const config=localStack(), actors=[];
@@ -65,6 +66,7 @@ try {
   await expect(page.getByLabel('CONSULTORIO ACTIVO')).toHaveValue(clinicId);
   await page.getByRole('link',{name:'Expedientes',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Expedientes.'})).toBeVisible();
+  await verifyRecords(page,memberPage,clinicId);
   await page.getByRole('link',{name:'Consultorios',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Mis consultorios.'})).toBeVisible();
   await expect(page.getByText(member.email,{exact:true})).toBeVisible();
@@ -92,4 +94,17 @@ try {
   if(Array.isArray(afterLogout)&&afterLogout.length) throw new Error('Revoked session still reads clinic.');
   console.log('PASS browser: anonymous routes, callback cancellation, create, rename, invite, owner/member permissions, selector, navigation, revocation, delete, logout, desktop and mobile. Synthetic local OAuth session; real Google consent remains pending.');
 } catch(error) { console.error('Browser verification failed:',error.message); process.exitCode=1; }
-finally { await browser?.close(); if(server?.pid) { const {spawnSync}=await import('node:child_process'); spawnSync('taskkill',['/PID',String(server.pid),'/T','/F'],{stdio:'ignore'}); } cleanupActors(actors); }
+finally {
+  await browser?.close();
+  if(server?.pid) {
+    const {spawnSync}=await import('node:child_process');
+    spawnSync('taskkill',['/PID',String(server.pid),'/T','/F'],{stdio:'ignore'});
+  }
+  cleanupActors(actors);
+  if(server?.pid) {
+    const webRoot=path.resolve(root,'web');
+    const generated=path.resolve(webRoot,'.next-test');
+    if(path.dirname(generated)!==webRoot || path.basename(generated)!=='.next-test') throw new Error('Unexpected build directory');
+    await rm(generated,{recursive:true,force:true,maxRetries:3,retryDelay:500});
+  }
+}

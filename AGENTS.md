@@ -23,6 +23,7 @@
 - Alcance autorizado implementado por sus puntos de entrada normales y criterios de aceptación satisfechos.
 - Evidencia con comando, resultado, fecha y entorno. Una comprobación sin ejecutar queda pendiente. Los mocks requieren complementarse con pruebas reales de RLS y cuotas.
 - Ejecutar `node harness/verify.mjs` y `node --test harness/verify.test.mjs`.
+- Se hicieron pruebas end-to-end de las funciones nuevas a implementar.
 - Para producto, registrar primero con aprobación los comandos reales de tests, lint, typecheck y build aplicables en `harness/checks.json`. Ejecutar `node harness/verify.mjs --product` antes de cerrar una función.
 - Revisar además los criterios de la función y el diff completo. La comprobación estructural acredita únicamente el harness.
 - Conservar un repositorio restartable. Nunca marcar done con verificaciones pendientes.

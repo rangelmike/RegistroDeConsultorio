@@ -1,0 +1,51 @@
+.records-space { display: grid; gap: 20px; }
+.date-entry { display:flex; align-items:center; gap:8px; }
+.date-entry .text-button { flex-shrink:0; }
+.view-section { margin-top:24px; padding-top:18px; border-top:1px solid var(--line); }
+.record-information { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr)); gap:16px 24px; }
+.record-information div { min-width:0; }
+.record-information dt { color:var(--muted); font-size:12px; }
+.record-information dd { margin:5px 0 0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.payments-table { overflow-x:auto; }
+.payments-table table { width:100%; border-collapse:collapse; }
+.payments-table th,.payments-table td { padding:12px; text-align:left; border-bottom:1px solid var(--line); }
+.payments-table td { min-width:110px; }
+.record-viewer h4 { margin:16px 0 8px; }
+.record-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+.record-tabs button { padding: 10px 16px; border: 0; border-bottom: 3px solid transparent; background: transparent; font-weight: 600; }
+.record-tabs [aria-current=page] { color: var(--green); border-color: var(--green); }
+.record-editor fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.record-fields { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(220px,100%),1fr)); gap: 14px 20px; margin: 15px 0; }
+.record-fields label, .record-fields input, .record-fields select, .record-fields textarea { width: 100%; min-width: 0; }
+.clinical-section { border-top: 1px solid var(--line); padding: 14px 0; }
+.clinical-section summary { font-weight: 650; color: var(--green); }
+.record-actions,.row-actions,.record-downloads { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.record-actions { margin: 16px 0 4px; }
+.record-actions .button,.record-downloads .button { font-size: 12px; padding: 8px 13px; }
+.record-rows { list-style: none; margin: 16px 0; padding: 0; }
+.record-rows li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-block-end: 1px solid var(--line); }
+.record-person { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.record-person span { display: block; color: var(--muted); font-size: 12px; }
+.record-check input { width: 18px; height: 18px; margin: 0; accent-color: var(--green); }
+.search-record,.record-import label { display: block; margin-top: 15px; max-width: 450px; }
+.record-import p, .record-list>p, .record-editor h2+p { margin-top: 8px; }
+.json-help { margin-top: 14px; }
+.json-help pre { overflow-x: auto; padding: 10px; background: var(--bg); border-radius: 6px; }
+.record-message,.record-error,.delete-records,.import-preview { padding: 14px 18px; border-radius: 8px; background: var(--soft); color: var(--ink); }
+.record-error,.delete-records { background: #fbefec; color: #742e26; }
+.delete-records,.import-preview { margin-top: 14px; }
+.import-preview ul { max-height: 160px; overflow: auto; overflow-wrap: anywhere; }
+.record-editor .arch,.record-editor .account-row { padding: 10px; margin: 15px 0; border: 1px solid var(--line); border-radius: 7px; }
+.tooth-row { display: grid; grid-template-columns: repeat(16,minmax(0,1fr)); gap: 3px; margin: 5px 0; }
+.tooth-row button { background: white; border: 1px solid var(--line); padding: 7px 0; border-radius: 4px; font-size: 12px; }
+.tooth-row [data-marked=true] { border-color: var(--green); background: var(--soft); }
+.tooth-row [aria-pressed=true] { background: var(--green); color: white; }
+.account-totals { display: flex; gap: 20px; flex-wrap: wrap; }
+.account-totals dd { margin: 0; font-weight: bold; }
+@media(max-width:700px) {
+  .record-tabs button { flex: 1; padding-inline: 6px; }
+  .record-rows li { flex-wrap: wrap; }
+  .row-actions { width: 100%; padding-left: 24px; }
+  .tooth-row { grid-template-columns: repeat(8,minmax(0,1fr)); }
+  .record-import input { max-width: 100%; }
+}

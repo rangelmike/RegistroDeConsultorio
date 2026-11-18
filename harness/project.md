@@ -1,5 +1,17 @@
 # Contrato del proyecto
 
+## Expedientes locales (18 de noviembre de 2026)
+
+- Ajustes finales autorizados: preguntas en historia médica, antecedentes predeterminados en Sin antecedente y tejidos en Normal, sección independiente de firmas retirada del formulario con compatibilidad de datos previos. La firma de movimientos permanece.
+- Las restas se calculan a partir de costo y anticipo por movimiento y en el resumen. Fechas visibles y editables en dd/mm/yyyy con botón Hoy; persistencia e intercambio JSON en yyyy-mm-dd.
+- Ver expediente presenta datos generales, datos dentales y pagos. Importar exactamente un expediente abre esta vista con los datos recuperados del servidor; un lote múltiple regresa a la consulta.
+- Simplificación verificada: definición única de valores predeterminados, carga compartida para ver/editar y filtro único de secciones. Conservar el comportamiento al modificar estos componentes.
+
+- La prueba interactiva pendiente de Google se conserva en foundation. Avanzar primero con cuotas sobre la base local comprobada y después con expedientes y su intercambio JSON. Continúa una sola fase activa.
+- Límites por minuto (lecturas/escrituras): dispositivo 120/60, usuario 240/120, consultorio 1200/600. Ráfaga por dispositivo de 60/50 cada diez segundos. Dos operaciones simultáneas por usuario y diez por consultorio. El dispositivo corresponde a la sesión asignada por Auth y validada en servidor. Volver a autenticarse puede rotarlo; los límites de usuario y consultorio son compartidos.
+- Un lote admite 50 expedientes y 2 MiB. Cada expediente consume cuota. Valores locales aprobados para un consultorio pequeño. Verificar consumo y plan en la fase de despliegue.
+- Alta manual o JSON versionado, consulta por nombre, edición, selección y eliminación con confirmación, exportación reimportable. Solo nombre y teléfono obligatorios. Los campos opcionales reproducen la historia clínica dental, exploración, odontogramas, presupuesto y estado de cuenta. Probar en navegador el ciclo completo individual y múltiple.
+
 ## Fase y decisiones
 
 Base local autorizada el 16 de noviembre de 2026: Next.js y TypeScript, Supabase para autenticación y datos. AWS permanece como destino futuro; servicios y región se decidirán en la fase aws. Las cuotas clínicas y sus valores se decidirán en la fase quotas, antes de habilitar datos clínicos. Objetivo económico de planes gratuitos con límites verificados al configurar proveedores.

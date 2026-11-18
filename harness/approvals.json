@@ -2,6 +2,20 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "2026-11-18-stable-session-close",
+      "reference": "Mensaje del usuario después de enumerar los pendientes de evidencia, Google real y commit en este chat.",
+      "quote": "Tienes autorización para resolver los pendientes para dejar el proyecto en un estado estable",
+      "scope": "Actualizar harness/project.md, feature_list.json, progress.md, session-handoff.md, harness/evidence.md, harness/approvals.json e harness/integrity.json con los ajustes finales de expedientes y sus verificaciones. Intentar el acceso real de Google con participación del usuario y guardar el estado verificado mediante commit local.",
+      "reason": "Conciliar el estado persistido con los cambios y pruebas de esta sesión, conservar pendientes externos auténticos y crear un punto de recuperación."
+    },
+    {
+      "id": "2026-11-18-expedientes",
+      "reference": "Respuesta del usuario del 18 de noviembre a la propuesta de cuotas, expedientes, JSON y actualización del harness.",
+      "quote": "Manten todo de la propuesta, la cual es autorizada, y trata de hacer una prueba real con Google dado que ya está definido que las cuentas que pueden acceder son todas las cuentas de correo de google, no solo las de terminación \"@gmail.com\"",
+      "scope": "Reconocer el cambio E2E existente en AGENTS.md. Actualizar harness/project.md, feature_list.json, progress.md, session-handoff.md, harness/evidence.md, harness/approvals.json y harness/integrity.json. Implementar y probar cuotas, expedientes y JSON en local e intentar Google real.",
+      "reason": "Habilitar las operaciones solicitadas por fases y conservar la verificación externa pendiente hasta observarla."
+    },
+    {
       "id": "initial-creation",
       "reference": "Mensaje del usuario que solicita crear el harness en esta conversación",
       "quote": "Solo has el harness, no empieces nada del proyecto aún.",

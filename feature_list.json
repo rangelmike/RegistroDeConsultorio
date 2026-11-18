@@ -6,7 +6,7 @@
       "name": "Base local: Google y administración de consultorios",
       "description": "Base Next.js/TypeScript, navegación y consultorios con membresías verificadas y aislamiento Supabase.",
       "dependencies": [],
-      "status": "in-progress",
+      "status": "blocked",
       "acceptance": [
         "Autorización del lote registrada; Next.js/TypeScript y cualquier cuenta de Google documentados. AWS y cuotas clínicas conservados en sus fases.",
         "Inicio exclusivo con Google, validación de sesión en servidor y navegación autenticada. Login real, cancelación, expiración y logout verificados; pendientes externos explícitos impiden done.",
@@ -32,33 +32,53 @@
     {
       "id": "quotas",
       "name": "Cuotas de consultas y actualizaciones",
-      "description": "Cuotas de consultas y actualizaciones",
-      "dependencies": [
-        "foundation"
-      ],
-      "status": "not-started",
+      "description": "Cuotas locales sobre la base ya verificada. La validación interactiva de Google sigue abierta en foundation.",
+      "dependencies": [],
+      "status": "done",
       "acceptance": [
         "Valores aprobados de cuota aplicados por dispositivo, usuario y grupo.",
         "Pruebas concurrentes entre instancias, ventanas, rotación de dispositivo y fallo del limitador.",
         "Llamadas directas al origen no eluden límites. 429 y Retry-After comprobados.",
         "Lotes y reintentos consumen cuota según trabajo, con consumo de base acotado."
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "command": "node harness/verify.mjs --product",
+          "result": "passed",
+          "date": "2026-11-18",
+          "environment": "Windows, Supabase/Postgres local. 72 pgTAP, dos conexiones para slots de usuario y consultorio, tipos, lint, build y navegador. Estado y cabecera de cuota en PostgreSQL; la ruta clínica se comprueba en records."
+        }
+      ]
     },
     {
       "id": "records",
       "name": "Pacientes y expedientes",
-      "description": "Pacientes y expedientes",
+      "description": "Consulta y creación, edición de todos los campos dentales, selección y borrado, importación y exportación JSON individual y múltiple. Solo nombre y teléfono obligatorios.",
       "dependencies": [
         "quotas"
       ],
-      "status": "not-started",
+      "status": "done",
       "acceptance": [
         "CRUD aislado por grupo y rol con validación de servidor.",
         "Paginación, tamaño máximo, errores sanitizados y auditoría comprobados.",
-        "Datos clínicos ausentes de logs, URLs y cachés públicas."
+        "Datos clínicos ausentes de logs, URLs y cachés públicas.",
+        "Historia, exploración dental, presupuesto y cuenta editables con nombre y teléfono obligatorios. Selección cruzando páginas y JSON individual/múltiple reimportable con vista previa y conflictos probados en navegador.",
+        "Fechas dd/mm/yyyy con Hoy; vista de lectura general, dental y pagos; importación de exactamente un expediente abre Ver expediente; defaults, preguntas y restas calculadas verificados."
       ],
-      "evidence": []
+      "evidence": [
+        {
+          "command": "node harness/verify.mjs --product",
+          "result": "passed",
+          "date": "2026-11-18",
+          "environment": "Windows, Node 24, Postgres 17 local, Edge. Lint, tipos, build, 5 pruebas unitarias, 95 pgTAP y concurrencia. E2E sintético de alta, búsqueda, edición, selección en dos páginas, borrado, exportación/reimportación individual y múltiple, conflictos y HTTP 429."
+        },
+        {
+          "command": "node harness/verify.mjs --product (cierre estable)",
+          "result": "passed",
+          "date": "2026-11-18",
+          "environment": "Windows, Node 24, Supabase/Postgres local y Edge. Lint, tipos, build, 5 pruebas unitarias, 95 SQL, concurrencia y E2E finales aprobados tras regenerar cache Next."
+        }
+      ]
     },
     {
       "id": "appointments",
@@ -77,7 +97,7 @@
     {
       "id": "portability",
       "name": "Importación JSON, exportación y recuperación",
-      "description": "Importación JSON, exportación y recuperación",
+      "description": "El JSON individual y múltiple se verificó en records. Pendientes respaldo administrativo, restauración ampliada y adjuntos.",
       "dependencies": [
         "records"
       ],
@@ -95,6 +115,7 @@
       "name": "Despliegue AWS",
       "description": "Despliegue AWS",
       "dependencies": [
+        "foundation",
         "appointments",
         "portability"
       ],

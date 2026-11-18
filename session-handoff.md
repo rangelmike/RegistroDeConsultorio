@@ -1,29 +1,30 @@
 # Relevo
 
-## Current Objective
+## Cierre estable autorizado — 18 de noviembre de 2026
 
-Sesión terminada por solicitud del usuario después de comprobar limpieza y estabilidad. Base local y administración de consultorios implementadas; foundation conserva in-progress por Google real pendiente de verificación.
+El producto local pasó todos los controles registrados tras regenerar la caché de compilación. Este cierre incluye los ajustes posteriores y la simplificación de expedientes. El commit local de cierre permite recuperar el estado verificado.
 
-## Files
+Comportamiento actual: fechas visibles y editables dd/mm/yyyy con Hoy, JSON yyyy-mm-dd, consulta y edición, vista de lectura con datos generales/dentales/pagos, selección entre páginas, restas calculadas e importación de exactamente un expediente que abre Ver expediente.
 
-- web/app/panel/consultorios/: interfaz de administración. web/lib/session.ts y clinics.ts: identidad y consultas.
-- supabase/migrations/: dos migraciones aplicadas localmente, sin cambios remotos.
-- supabase/tests/clinics.test.sql: 57 comprobaciones; la aserción de cascada se limita ahora a su fixture y admite otros consultorios existentes.
-- web/tests/: validación y navegador local con cuentas sintéticas eliminadas al terminar.
-- harness/project.md: configuración actual y comandos. harness/evidence.md: resultados y autorizaciones.
+Google permanece pendiente por elección expresa del usuario. Se llegó a la pantalla real de Google, sin completar credenciales, consentimiento, callback ni renovación. Foundation conserva blocked. Para verificarlo más adelante se necesita la participación del usuario en una pestaña dedicada.
 
-## Current Environment
+Ejecutar node harness/verify.mjs al comenzar. Los controles de cierre son node harness/verify.mjs --product y node --test harness/verify.test.mjs. Antes de compilar en Windows, detener el servidor Next de este checkout si mantiene archivos bloqueados. La caché web/.next se puede regenerar. Conservar datos y secretos locales.
 
-Google habilitado en archivo y servicio local. .env en la raíz para credenciales Google del CLI; web/.env.local corresponde a Next.js. Ambos excluidos de Git. No imprimir valores. Supabase local existente se conserva, incluido su consultorio; no se hizo reset. Los procesos temporales de navegador se cierran por el runner.
+## Registro anterior
 
-## Blockers
+## Estado del 18 de noviembre de 2026
 
-Falta observar consentimiento, callback exitoso y renovación reales de Google. Ningún hallazgo de advisors locales. Verificaciones automáticas pasan. No confundir sesiones sintéticas con validación real del proveedor.
+Expedientes disponible en /panel/expedientes al seleccionar un consultorio. Cuotas y CRUD con intercambio JSON verificados en local. El acceso real de Google alcanzó accounts.google.com sin filtro de dominio. Falta observar consentimiento, retorno al panel y renovación reales para cerrar foundation.
 
-## Recommended Next Step
+## Archivos
 
-Ejecutar node harness/verify.mjs y npm --prefix web run dev:local. Verificar Google real y registrar su evidencia con autorización antes de marcar foundation done. Si se solicita publicar o migrar a remoto, obtener autorización específica.
+- web/app/panel/expedientes/ contiene las secciones de consulta y creación, el formulario clínico y la ruta POST.
+- web/lib/dental-record.ts define los campos de los tres formatos. web/lib/record-file.ts prepara los archivos individuales y múltiples.
+- supabase/migrations/ conserva las cinco migraciones aplicadas a la base local existente. Las tres últimas añaden cuotas, expedientes y contabilización de operaciones rechazadas.
+- supabase/tests/ y web/tests/ cubren base real, concurrencia y navegador. Los registros y cuentas de las pruebas son sintéticos.
 
-## End of Session
+## Continuación
 
-Cambios conservados sin commit, incluidos archivos nuevos de aplicación y migraciones. Son trabajo del proyecto, no basura que deba borrarse. Secretos, cachés y capturas permanecen fuera de Git. Cierre cubierto por el lote explícito anterior y la solicitud de limpieza registrada en harness/approvals.json. No se modificaron reglas, controles, dependencias ni código de producto durante esta limpieza.
+Ejecutar node harness/verify.mjs. Para usar el entorno, iniciar Supabase local si hace falta y ejecutar npm --prefix web run dev:local. Acceder por http://127.0.0.1:3000. Para repetir el cierre local ejecutar node harness/verify.mjs --product y node --test harness/verify.test.mjs.
+
+Completar la comprobación interactiva de Google con una cuenta elegida por el usuario. No registrar identificadores personales, códigos ni tokens en la evidencia. Los secretos locales permanecen en sus archivos excluidos de Git. Conservar la base existente. Las autorizaciones de este lote cubren únicamente el entorno local.

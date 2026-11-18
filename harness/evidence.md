@@ -1,5 +1,24 @@
 # Evidencia de creación
 
+## Cierre estable autorizado — 18 de noviembre de 2026
+
+- Autorización registrada como 2026-11-18-stable-session-close. Comandos ejecutados en Windows, Node 24, Supabase/Postgres 17 locales y Edge.
+- node harness/verify.mjs --product terminó con código 0 tras recuperar un fallo EPERM por archivos de Next bloqueados. Se detuvo el servidor local identificado por Next y se eliminó únicamente web/.next después de validar su ruta. La segunda ejecución pasó lint, tipos, build, 5 pruebas unitarias, 95 comprobaciones SQL, concurrencia independiente y navegador.
+- El navegador verificó fechas y Hoy, lectura en datos generales/dentales/pagos, móvil, edición, defaults, cálculo de restas, JSON individual que abre Ver expediente y lotes múltiples. La simplificación conserva las llamadas y el comportamiento.
+- node --test harness/verify.test.mjs pasó 8/8. supabase db advisors --local --fail-on warn devolvió cero hallazgos. supabase migration list --local confirmó cinco migraciones. git diff --check pasó.
+- Prueba Google real en pestaña integrada dedicada: pantalla Sign in de Registro Digital Valencia, pendiente de introducir la cuenta. El usuario eligió expresamente Prefiero dejar Google pendiente. No se acredita consentimiento, retorno, renovación ni cierre reales.
+- Revisión automática rechazó inspeccionar la ventana privada de Classroom por contenido ajeno a la tarea. Se usó una pestaña integrada dedicada que llegó a la pantalla de Google. El flujo se dejó pendiente por elección del usuario.
+- Inspección acotada de patrones de claves/JWT en los archivos de producto, pruebas y migraciones sin coincidencias. Los secretos permanecen excluidos de Git. Se prepara un commit local con los cambios de esta sesión.
+
+## Expedientes y cuotas locales — 18 de noviembre de 2026
+
+- Autorización literal en harness/approvals.json, lote 2026-11-18-expedientes. Se reconoció la regla E2E ya presente en AGENTS.md.
+- Windows, Node 24, CLI 2.117.0, PostgreSQL 17 en Docker y Edge. node harness/verify.mjs --product terminó con código 0. Pasaron lint, tipos, build, 5 pruebas unitarias, 95 comprobaciones pgTAP, concurrencia entre conexiones y los recorridos de navegador.
+- Las pruebas cubrieron alta mínima, validación, signos y campos clínicos del modelo, edición dental y contable, búsqueda, selección entre páginas, eliminación confirmada y comparación de los datos exportados y reimportados. El acceso clínico verificó membresía vigente, aislamiento, revisión concurrente, conflictos transaccionales y cargos por lote. La API devolvió HTTP 429 con Retry-After.
+- supabase db advisors --local --fail-on warn informó cero hallazgos. supabase migration list --local confirmó cinco migraciones. El despliegue y la base remota quedan fuera de este lote.
+- Prueba externa en Edge contra la aplicación local. El botón Continuar con Google redirigió al dominio accounts.google.com, título Sign in - Google Accounts, sin parámetro hd. Se invitó al usuario a completar el acceso en su propio navegador. La consulta local de existencia de sesión nueva del proveedor no encontró una real al comprobarse. Consentimiento, callback exitoso y renovación reales siguen pendientes.
+- Las pruebas de navegador retiran las cuentas y los registros sintéticos, y la caché exclusiva del runner. No se reinició la base. Se mantuvo el servidor local disponible para completar el acceso interactivo.
+
 - Fecha de sesión — 2026-11-16, America/Mexico_City.
 - Entorno — Windows PowerShell, Node.js v24.21.0.
 - Alcance — creación del harness. Todas las funciones del producto permanecen not-started.
