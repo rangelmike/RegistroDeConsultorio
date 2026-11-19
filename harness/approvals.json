@@ -2,6 +2,27 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "2026-11-18-local-startup-commands",
+      "reference": "Mensaje del usuario que solicita documentar en el harness los comandos de inicialización de Next dev y Supabase local.",
+      "quote": "En caso de que no esté aún en ningún lado, pon en el harness los comandos de inicialización que me dijiste y cualquier otro que sea necesario (el de inicio de servidor local de dev para next y el de docker para supabase local)",
+      "scope": "Completar la sección Operación local de esta base en harness/project.md y registrar autorización, evidencia e integridad en harness/approvals.json, harness/evidence.md y harness/integrity.json.",
+      "reason": "Mantener una referencia única con requisitos, preparación, arranque ordenado, diagnóstico, apagado y reinicio que conserva datos."
+    },
+    {
+      "id": "2026-11-18-complete-production-deployment-rule",
+      "reference": "Mensaje del usuario que solicita agregar al harness el flujo completo de publicación a producción, después de explicar las migraciones y los servicios locales.",
+      "quote": "Agrega en donde sea conveniente del harness que cuando se haga push a producción se asegure que todo lo que se debe subir, se suba, esto es, se hace push al repositorio de git, las migraciones de supabase que sean necesarias y cualquier otra cosa que sea necesaria. Nota que esto no debe alterar ni agregar nada al proyecto, solo hacer lo necesario para hacer un despliegue a producción",
+      "scope": "Añadir el flujo de despliegue completo en harness/project.md y registrar esta petición y su verificación en harness/approvals.json, harness/evidence.md e harness/integrity.json. Cambio limitado al harness.",
+      "reason": "Evitar publicaciones parciales que actualicen la aplicación sin sus dependencias de base o configuración, conservando el alcance de producto aprobado."
+    },
+    {
+      "id": "2026-11-18-production-records-migrations",
+      "reference": "Respuesta del usuario a la solicitud asíncrona que enumera las tres migraciones pendientes y los archivos de registro en este chat.",
+      "quote": "Autorizo las tres migraciones y el registro indicado",
+      "scope": "Aplicar al proyecto Supabase utilizado por main.d2yobiyz2ic5av.amplifyapp.com únicamente 20261118191856_clinical_quotas.sql, 20261118192504_dental_records.sql y 20261118193538_dental_quota_accounting.sql. Verificar la intervención y actualizar harness/project.md, harness/approvals.json, harness/evidence.md, harness/integrity.json, feature_list.json, progress.md y session-handoff.md.",
+      "reason": "El despliegue de Amplify apunta al proyecto verificado, cuya API devuelve PGRST202 por ausencia de dental_operation. La previsualización remota confirmó exactamente estas tres migraciones pendientes."
+    },
+    {
       "id": "2026-11-18-stable-session-close",
       "reference": "Mensaje del usuario después de enumerar los pendientes de evidencia, Google real y commit en este chat.",
       "quote": "Tienes autorización para resolver los pendientes para dejar el proyecto en un estado estable",

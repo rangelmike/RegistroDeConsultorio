@@ -67,19 +67,19 @@
     ".agents/skills/supabase/references/skill-feedback.md": "85e688b56623f9250d23b60ea950dee740fd537980fc72178fe185eab76742b7",
     ".agents/skills/supabase/SKILL.md": "44f4cfefb57751abf9288fb2920de621c748964de1301db627dea725e187bccf",
     "AGENTS.md": "f0b0d6bcd41d53fa0fc4949189d2ea159453ac19c3c9b62dc4663826fcbbc90c",
-    "feature_list.json": "4052570694dd9b7f51de03c0615b19ccba8a1b4a35a1d43c1b906871b5eabe80",
-    "harness/approvals.json": "6d8716a7aebf75be1e1f5ca8790323911c716dfe3e7bda65ff5fe52d57b44919",
+    "feature_list.json": "439ded035b7d754fd5fd8795508ec90442999944f2091106cba8adaedaf32ef5",
+    "harness/approvals.json": "f8ba26adb0623214373a91b1c87dd951d35533f93c49bb47f6a8ef65fbc20bd6",
     "harness/checks.json": "2c979d93e66b78d568ba8d5f0f5ea7009c2d19732ce987a75ecbf951a26d604e",
-    "harness/evidence.md": "d8be17891a3407d21e11f7649045fe902c29f88a5c185fcee0d0037b0846a88f",
+    "harness/evidence.md": "2d0715f33601ff12e6df1149a7349999cfbe39060d551d98b3211f4adcc558fc",
     "harness/governance.md": "44f75d63ec0639cc4f2181b5b069bfe3d723daff9a4af52c9b863c9cde5bf1ca",
-    "harness/project.md": "b1425018a54d3486b27f91844dd5f0834c800858d3c193b07e93e4329e39ecee",
+    "harness/project.md": "b763ddf248bbab83653a0a86a9506c0a2c7e2073927430217c8cc24d3e66089f",
     "harness/verify.mjs": "65d4fbfa9bd04a35ecd3a4d9adc20a659708377ab5de773c886ee13265d829f9",
     "harness/verify.test.mjs": "845b0c1734d6abce7dc3af5f14c8bad81a1330aed62f3d784f601b44278ec713",
     "init.ps1": "5676bd3780aee792d5a6227f41096f329e6cbb5fc9e0276e581a37924aaa93ff",
     "init.sh": "2c80f931ab8898908cf4f574980a6cd3bff2cb886b221c2b8e59e41d1b7cdaeb",
-    "progress.md": "a4db4f2aff74833c8b98d347c3396cdd0af9ed75fe68b2717efacd28274bdfdf",
-    "session-handoff.md": "fef7be0e76ade6c33dce420113e2f49fa24c06f7f33ca25399c626b1ef014e0e",
+    "progress.md": "e14a837f20ab02a471825e7337f63ae3add30b0e176d821bbeaf2923d4b23c84",
+    "session-handoff.md": "caa7990d2f0d327a345a7773c026dce00dacc02fe4e3a094cb5c07f9a285693f",
     "skills-lock.json": "706d939c027eac6b649079ae2ec7152bc42e13793dd1f7ce51b980cc1900017f"
   },
-  "digest": "747d0b00388448d1ddecdb44b72f0351c0c4e3e04dbd134a328fd609bce1b9ed"
+  "digest": "7e71d94ff3dd591fb3751bb502562b94d765da3a19976afa095bce134ddd05c0"
 }

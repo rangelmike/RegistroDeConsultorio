@@ -1,5 +1,24 @@
 # Contrato del proyecto
 
+## Despliegue completo a producción
+
+Cuando el usuario solicite un push o despliegue a producción, completar la publicación de todas las piezas necesarias del cambio autorizado y verificar su resultado.
+
+1. Revisar el diff completo, incluidos archivos nuevos, y determinar qué debe publicarse. Confirmar repositorio, rama de producción, commit, aplicación Amplify y proyecto Supabase de destino. Incluir los archivos necesarios para reproducir la versión y mantener secretos, datos clínicos y artefactos temporales fuera de Git.
+2. Identificar las dependencias del cambio ya implementado. Además del código, comprobar las migraciones de Supabase pendientes y, cuando corresponda, variables de entorno, configuración de autenticación, funciones y otros componentes existentes que requieran publicación o actualización para esa versión. Cada componente debe corresponder al mismo entorno de producción.
+3. Ejecutar los controles aplicables registrados y revisar la previsualización de migraciones contra el destino remoto. Ordenar las operaciones para mantener compatible la versión activa. Aplicar las migraciones aditivas necesarias antes del push que dispara Amplify cuando el nuevo código dependa de ellas. Coordinar los cambios incompatibles según el alcance aprobado.
+4. Dentro de la autorización del despliegue solicitado, aplicar las migraciones y actualizaciones de configuración necesarias, publicar todos los archivos del cambio mediante Git y completar los demás pasos de publicación identificados. Comprobar el historial remoto de migraciones y las respuestas de cada servicio. Un error deja pendientes los pasos dependientes hasta resolverlo.
+5. Esperar a que Amplify termine el despliegue del commit previsto y comprobar la aplicación publicada por sus puntos de entrada normales, incluidas las funciones afectadas y su conexión con Supabase. Una prueba local acredita el entorno local. Registrar por separado las comprobaciones de producción y cualquier bloqueo de acceso o verificación.
+6. Cerrar con evidencia del commit publicado, resultado de Amplify, migraciones aplicadas o ausencia de pendientes, demás componentes actualizados y pruebas de producción. Mantener explícito cualquier paso pendiente y conservar una vía de recuperación compatible con la base.
+
+El alcance de este flujo se limita a desplegar lo ya implementado y aprobado. Conservar código, funcionalidad, dependencias, estructura e infraestructura del proyecto al ejecutar la publicación. Cualquier desarrollo, nueva automatización, recurso o cambio de producto que resulte necesario requiere su propia solicitud o autorización de alcance. Esta instrucción documenta el flujo para futuros despliegues.
+
+## Incidencia de Expedientes en producción — 18 de noviembre de 2026
+
+- El usuario desplegó la aplicación mediante GitHub y AWS Amplify en https://main.d2yobiyz2ic5av.amplifyapp.com. Los archivos públicos del despliegue coinciden con el proyecto Supabase configurado y enlazado.
+- Se autoriza una intervención puntual para aplicar exclusivamente las tres migraciones existentes de cuotas, expedientes y contabilización de cuotas, pendientes según previsualización remota. Se conserva el contenido existente y se verifican función, historial y advisors.
+- La autorización y evidencia se registran con el identificador 2026-11-18-production-records-migrations. El estado general de preparación AWS y la comprobación completa de Google conservan sus criterios pendientes.
+
 ## Expedientes locales (18 de noviembre de 2026)
 
 - Ajustes finales autorizados: preguntas en historia médica, antecedentes predeterminados en Sin antecedente y tejidos en Normal, sección independiente de firmas retirada del formulario con compatibilidad de datos previos. La firma de movimientos permanece.
@@ -80,8 +99,79 @@ Confirmar versiones al implementar.
 
 ## Operación local de esta base
 
-- CLI verificado: 2.117.0; Postgres 17 en Docker. `supabase start -x realtime,storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor` desde la raíz inicia el entorno de pruebas. Los comandos de base deben llevar `--local`.
-- `npm --prefix web run dev:local` lee la URL y clave publicable locales en memoria y arranca Next.js, preservando web/.env.local existente. `npm --prefix web run dev` sigue usando la configuración habitual del usuario.
+- CLI verificado: 2.117.0; Postgres 17 en Docker. Ejecutar los comandos de esta sección desde la raíz del repositorio. Los comandos de base deben llevar `--local`. Abrir Docker Desktop y esperar a que su motor esté listo antes de iniciar Supabase.
+
+### Preparar e iniciar en PowerShell
+
+Entrar al repositorio y comprobar el harness al comenzar la sesión.
+
+```powershell
+cd "C:\Users\migue\OneDrive\Documentos\Programming\WebPages\ConsultorioRegistro"
+node harness/verify.mjs
+```
+
+`./init.ps1` y `bash init.sh` también ejecutan esa verificación del harness. El arranque de los servicios se realiza con los comandos siguientes.
+
+En una copia recién obtenida, o cuando cambie el lockfile, instalar las dependencias exactas de la aplicación.
+
+```powershell
+npm --prefix web ci
+```
+
+Comprobar que el motor Docker responde e iniciar los contenedores locales que utiliza el proyecto. Supabase CLI administra estos contenedores.
+
+```powershell
+docker info --format '{{.ServerVersion}}'
+supabase start -x realtime,storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+```
+
+Si se recibieron nuevas migraciones, aplicar las pendientes a la base local antes de probar el nuevo código.
+
+```powershell
+supabase migration up --local
+```
+
+Iniciar Next.js y mantener esta terminal abierta mientras se use la aplicación.
+
+```powershell
+npm --prefix web run dev:local
+```
+
+Abrir http://127.0.0.1:3000, o el puerto que indique Next si 3000 está ocupado. El comando dev:local lee la URL y clave publicable de Supabase local en memoria y preserva web/.env.local. El comando `npm --prefix web run dev` utiliza la configuración habitual del usuario.
+
+### Comprobar servicios y detenerlos
+
+Ver los contenedores del proyecto y los procesos de Next.js con sus identificadores.
+
+```powershell
+docker ps --filter name=ConsultorioRegistro --format 'table {{.Names}}\t{{.Status}}'
+Get-CimInstance Win32_Process |
+  Where-Object { $_.Name -eq 'node.exe' -and $_.CommandLine -match 'next' } |
+  Select-Object ProcessId, ParentProcessId, CommandLine |
+  Format-List
+```
+
+Next puede crear varios procesos para un mismo servidor. Para detenerlo, presionar Ctrl+C en la terminal donde se inició. Después detener los servicios locales de Supabase desde la raíz del repositorio.
+
+```powershell
+supabase stop
+```
+
+Este comando conserva los datos locales para el siguiente inicio. La opción `--no-backup` elimina los volúmenes de datos. Para reanudar, repetir el inicio de Docker, Supabase y Next.js. La base local y la base de producción tienen datos e historiales independientes.
+
+### Comprobaciones completas
+
+Con Docker y Supabase local disponibles, los controles registrados del producto y las pruebas del harness se ejecutan así.
+
+```powershell
+node harness/verify.mjs --product
+node --test harness/verify.test.mjs
+```
+
+Detener el servidor Next de este checkout antes de compilar si mantiene archivos de caché bloqueados en Windows.
+
+### Configuración y datos locales
+
 - Historial canónico: supabase/migrations/. `supabase db reset --local --no-seed` reconstruye la base local y borra sus datos; usar solo en el entorno de pruebas de esta tarea.
 - Google local está habilitado en supabase/config.toml y confirmado en /auth/v1/settings al cierre del 2026-11-16. Las variables SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID y SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET se mantienen en el .env de la raíz para Supabase CLI; web/.env.local corresponde a Next.js. Ambos archivos están excluidos de Git. El consentimiento y la renovación reales de Google aún no han sido verificados por el agente. Callback de Google: http://127.0.0.1:54321/auth/v1/callback; retorno de la aplicación: http://127.0.0.1:3000/auth/callback o http://localhost:3000/auth/callback. Reiniciar la pila local después de configurarlo. Ningún otro proveedor se habilita para uso de producto.
 - La autorización de datos exige sesión OAuth vigente en auth.sessions, identidad Google y correo verificado mantenidos por Auth. No basta con editar metadata ni conservar un JWT tras cerrar sesión. El test de navegador usa una sesión OAuth sintética firmada únicamente con la clave local, en memoria; no acredita el consentimiento real de Google.

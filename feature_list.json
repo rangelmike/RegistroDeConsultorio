@@ -77,6 +77,12 @@
           "result": "passed",
           "date": "2026-11-18",
           "environment": "Windows, Node 24, Supabase/Postgres local y Edge. Lint, tipos, build, 5 pruebas unitarias, 95 SQL, concurrencia y E2E finales aprobados tras regenerar cache Next."
+        },
+        {
+          "command": "supabase db push --project-ref [referencia verificada] --skip-vault --yes y verificaciones posteriores",
+          "result": "passed",
+          "date": "2026-11-18",
+          "environment": "Supabase producción usado por Amplify. Tres migraciones aplicadas. Función, tablas, ACL e historial verificados mediante catálogo. API anónima HTTP 401/42501. Recorrido autenticado de producción pendiente."
         }
       ]
     },

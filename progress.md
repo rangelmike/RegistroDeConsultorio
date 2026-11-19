@@ -1,5 +1,12 @@
 # Progreso
 
+## Incidencia de producción resuelta en base — 18 de noviembre de 2026
+
+- El usuario desplegó mediante Amplify. La API fallaba con PGRST202 porque faltaban tres migraciones remotas. Se aplicaron las tres tras aprobación explícita 2026-11-18-production-records-migrations.
+- Cuotas, expedientes y contabilización de cuotas constan en el historial de producción. Función, tablas, permiso autenticado y bloqueo anónimo verificados por catálogo. La API pasó de función ausente a rechazo anónimo correcto, HTTP 401/42501.
+- Advisors remotos: un aviso global de protección de contraseñas filtradas de Auth, sin avisos de las nuevas tablas o funciones. La autenticación de producto es Google.
+- Pendiente comprobar consulta, creación e importación desde una sesión real de usuario en la aplicación desplegada. Los controles locales previos siguen documentados. La intervención no cierra los criterios generales de AWS ni la prueba completa de Google.
+
 ## Cierre estable de la sesión — 18 de noviembre de 2026
 
 - Todos los ajustes finales de expedientes y la simplificación están implementados y verificados. Fechas dd/mm/yyyy con Hoy, vista de lectura en tres secciones, importación individual que abre Ver expediente, preguntas médicas, valores predeterminados y restas calculadas.

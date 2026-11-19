@@ -1,5 +1,29 @@
 # Evidencia de creación
 
+## Comandos del entorno local — 18 de noviembre de 2026
+
+- Autorización 2026-11-18-local-startup-commands. Se completó la sección Operación local de esta base en harness/project.md, reutilizando los comandos de Supabase y dev:local ya documentados.
+- Se documentaron directorio de trabajo, verificación inicial, instalación con lockfile, disponibilidad de Docker, arranque reducido de Supabase, migraciones locales, Next dev, diagnóstico de procesos/contenedores, apagado que conserva datos y controles completos.
+- Se contrastaron los comandos con web/package.json, web/dev-local.mjs, init.ps1 e init.sh. Windows local: node harness/verify.mjs pasó con 79 archivos protegidos; node --test harness/verify.test.mjs pasó 8/8; git diff --check pasó.
+- Cambio limitado a documentación y trazabilidad del harness. Esta comprobación no ejecutó instalación de dependencias, arranque, apagado ni migraciones.
+
+## Regla de despliegue completo — 18 de noviembre de 2026
+
+- Solicitud explícita registrada como 2026-11-18-complete-production-deployment-rule. Se añadió a harness/project.md el flujo de publicación de código, migraciones y configuración aplicable, con comprobación del destino, orden compatible, espera de Amplify y verificación de producción.
+- El flujo limita las operaciones a publicar cambios existentes aprobados. Esta tarea modifica únicamente harness/project.md, harness/approvals.json, harness/evidence.md y harness/integrity.json.
+- Windows local: node harness/verify.mjs pasó con 79 archivos protegidos. node --test harness/verify.test.mjs pasó 8/8. git diff --check pasó. Revisión del texto contra la solicitud completada.
+
+## Corrección de Expedientes en producción — 18 de noviembre de 2026
+
+- Permiso explícito 2026-11-18-production-records-migrations. El usuario confirmó despliegue por GitHub/Amplify y ausencia de migraciones adicionales.
+- La API de Supabase configurada respondió HTTP 404, PGRST202 para dental_operation. Los archivos JavaScript públicos de https://main.d2yobiyz2ic5av.amplifyapp.com coincidieron con la referencia Supabase del archivo de configuración y del enlace local, sin registrar claves.
+- supabase db push --project-ref [referencia verificada] --dry-run --skip-vault mostró exactamente 20261118191856_clinical_quotas.sql, 20261118192504_dental_records.sql y 20261118193538_dental_quota_accounting.sql pendientes.
+- Tras aprobación, supabase db push --project-ref [referencia verificada] --skip-vault --yes terminó con código 0 y aplicó exclusivamente esas tres migraciones. No se aplicaron seeds ni roles.
+- supabase db query --linked --project-ref [referencia verificada] comprobó seis resultados verdaderos: función pública existente, tabla de expedientes y tabla de cuotas existentes, permiso EXECUTE autenticado, bloqueo anónimo y tres entradas del historial presentes. Consulta limitada a catálogo, permisos e historial, sin datos clínicos.
+- Petición HTTP anónima vacía posterior a dental_operation: HTTP 401, código 42501. La API ya reconoce la función; el fallo PGRST202 desapareció.
+- supabase db advisors --linked --project-ref [referencia verificada] --level warn --fail-on warn devolvió código 1 por un único aviso global auth_leaked_password_protection. No presentó avisos de las tablas o funciones recién migradas. El producto usa Google exclusivamente y la revisión no cambió Auth.
+- La verificación funcional autenticada desde la sesión de producción del usuario queda pendiente. Esta intervención corrige la dependencia de base identificada y no acredita un recorrido completo del navegador en producción.
+
 ## Cierre estable autorizado — 18 de noviembre de 2026
 
 - Autorización registrada como 2026-11-18-stable-session-close. Comandos ejecutados en Windows, Node 24, Supabase/Postgres 17 locales y Edge.

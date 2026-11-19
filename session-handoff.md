@@ -1,5 +1,13 @@
 # Relevo
 
+## Intervención remota de Expedientes — 18 de noviembre de 2026
+
+El usuario desplegó por GitHub en https://main.d2yobiyz2ic5av.amplifyapp.com y autorizó aplicar las tres migraciones existentes pendientes. Ya están aplicadas en el proyecto Supabase que coincide con la configuración del deploy: cuotas, expedientes y contabilización de cuotas. La API ya reconoce dental_operation.
+
+Se verificaron solo catálogo, permisos, historial y respuesta anónima. Para continuar, comprobar con la sesión del usuario que la consulta y las altas/importaciones funcionan desde producción. No dar por realizado ese recorrido. Los advisors solo informaron auth_leaked_password_protection, aviso global de Auth; se mantiene Google como único proveedor de producto.
+
+La autorización puntual está en harness/approvals.json, registro 2026-11-18-production-records-migrations. Los detalles están en harness/evidence.md. No volver a aplicar manualmente los SQL que ya constan en el historial.
+
 ## Cierre estable autorizado — 18 de noviembre de 2026
 
 El producto local pasó todos los controles registrados tras regenerar la caché de compilación. Este cierre incluye los ajustes posteriores y la simplificación de expedientes. El commit local de cierre permite recuperar el estado verificado.
