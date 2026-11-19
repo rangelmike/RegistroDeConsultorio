@@ -1,3 +1,4 @@
+import {navigate} from './navigation.mjs';
 import { expect } from '@playwright/test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -60,6 +61,7 @@ export async function verifyRecords(page,memberPage,clinicId) {
   await expect(viewer.getByText('Marca sintética',{exact:true})).toBeVisible();
   await button('Pagos',viewer).click();
   await expect(viewer.locator('.payments-table')).toContainText('300.50');
+  if(await page.getByRole('button',{name:'Ocultar menú',exact:true}).isVisible()) await page.getByRole('button',{name:'Ocultar menú',exact:true}).click();
   await page.setViewportSize({width:390,height:844});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.setViewportSize({width:1440,height:1100});
@@ -111,7 +113,7 @@ export async function verifyRecords(page,memberPage,clinicId) {
   await expect(page.locator('.record-error')).toContainText('Expediente 1');
   await expect(button('Confirmar importación')).toHaveCount(0);
 
-  await memberPage.getByRole('link',{name:'Expedientes',exact:true}).click();
+  await navigate(memberPage,'Expedientes');
   await expect(memberPage.getByText('Paciente sintético Alfa',{exact:true})).toBeVisible();
   const series=Array.from({length:11},(_,i)=>({nombre:'Serie sintética '+i,telefono:'000'}));
   await memberPage.getByLabel('Archivo JSON').setInputFiles({name:'serie.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(series))});
@@ -123,6 +125,7 @@ export async function verifyRecords(page,memberPage,clinicId) {
   await expect(memberPage.locator('.record-rows li')).toHaveCount(1);
   await button('Seleccionar todos',memberPage).click();
   await expect(button('Exportar selección (11)',memberPage)).toBeVisible();
+  if(await page.getByRole('button',{name:'Ocultar menú',exact:true}).isVisible()) await page.getByRole('button',{name:'Ocultar menú',exact:true}).click();
   await page.setViewportSize({width:390,height:844});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.setViewportSize({width:1440,height:1100});
@@ -136,6 +139,6 @@ export async function verifyRecords(page,memberPage,clinicId) {
     return 0;
   },clinicId);
   assert.ok(quota>=1 && quota<=60);
-  await memberPage.getByRole('link',{name:'Consultorios',exact:true}).click();
+  await navigate(memberPage,'Consultorios');
   console.log('PASS expedientes E2E: alta mínima, edición dental y cuenta, búsqueda, selección, borrado confirmado, JSON individual y múltiple, duplicados, miembro, móvil y HTTP 429.');
 }

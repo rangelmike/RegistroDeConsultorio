@@ -1,3 +1,4 @@
+import {navigate} from './navigation.mjs';
 import { chromium, expect } from '@playwright/test';
 import { verifyRecords } from './records-browser.mjs';
 import { verifyAgenda, verifyCompetingBookings } from './agenda-browser.mjs';
@@ -32,6 +33,8 @@ try {
   await context.addCookies(owner.cookies);
   await page.goto(base+'/panel/consultorios');
   await expect(page.getByRole('heading',{name:'Mis consultorios.'})).toBeVisible();
+  await expect(page.getByRole('button',{name:'Mostrar menú',exact:true})).toHaveAttribute('aria-expanded','false');
+  if(await page.getByRole('button',{name:'Mostrar menú',exact:true}).isVisible()) await page.getByRole('button',{name:'Mostrar menú',exact:true}).click();
   await page.getByRole('button',{name:'Nuevo consultorio'}).click();
   const dialog=page.getByRole('dialog');
   await dialog.getByLabel('Nombre del consultorio').fill('Consultorio Alameda');
@@ -64,19 +67,21 @@ try {
   const secondClinic=(await (await api(owner,'clinics?select=id,name')).json()).find(c=>c.name==='Consultorio Bosque');
   await verifyCompetingBookings(api,owner,secondClinic.id);
   await expect(page.getByRole('heading',{name:'Consultorio Alameda Norte',exact:true}).last()).toBeVisible();
-  await page.getByRole('link',{name:'Agenda',exact:true}).click();
+  await navigate(page,'Agenda');
   await expect(page.getByRole('heading',{name:'Agenda.'})).toBeVisible();
   await expect(page.getByLabel('CONSULTORIO ACTIVO')).toHaveValue(clinicId);
+  await page.getByRole('button',{name:'Ocultar menú',exact:true}).click();
   await verifyAgenda(page,owner.email.split('@')[0]);
-  await page.getByRole('link',{name:'Expedientes',exact:true}).click();
+  await navigate(page,'Expedientes');
   await expect(page).toHaveURL(base+'/panel/expedientes');
   await expect(page.getByRole('heading',{name:'Expedientes.'})).toBeVisible();
   await verifyRecords(page,memberPage,clinicId);
-  await page.getByRole('link',{name:'Consultorios',exact:true}).click();
+  await navigate(page,'Consultorios');
   await expect(page.getByRole('heading',{name:'Mis consultorios.'})).toBeVisible();
   await expect(page.getByText(member.email,{exact:true})).toBeVisible();
   await mkdir(path.join(root,'.local'),{recursive:true});
   await page.screenshot({path:path.join(root,'.local','consultorios-desktop.png'),fullPage:true});
+  if(await page.getByRole('button',{name:'Ocultar menú',exact:true}).isVisible()) await page.getByRole('button',{name:'Ocultar menú',exact:true}).click();
   await page.setViewportSize({width:390,height:844});
   if(await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth)) throw new Error('Mobile layout overflows horizontally.');
   await page.screenshot({path:path.join(root,'.local','consultorios-mobile.png'),fullPage:true});
@@ -93,6 +98,7 @@ try {
   await page.getByRole('button',{name:'Eliminar definitivamente'}).click();
   await expect(page.getByRole('heading',{name:'Consultorio Alameda Norte',exact:true})).toHaveCount(0);
   await expect(page.getByLabel('CONSULTORIO ACTIVO')).not.toHaveValue(clinicId);
+  if(await page.getByRole('button',{name:'Mostrar menú',exact:true}).isVisible()) await page.getByRole('button',{name:'Mostrar menú',exact:true}).click();
   await page.getByRole('button',{name:'Cerrar sesión'}).click();
   await expect(page.getByRole('button',{name:'Continuar con Google'})).toBeVisible();
   const afterLogout=await (await api(owner,'clinics?select=id')).json();
