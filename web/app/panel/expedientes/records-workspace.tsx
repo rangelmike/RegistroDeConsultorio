@@ -14,7 +14,7 @@ const blank = ():RecordData=>({id:crypto.randomUUID(),nombre:"",telefono:""});
 const pause = (ms:number)=>new Promise(resolve=>setTimeout(resolve,ms));
 const errorText = (e:unknown)=>e instanceof Error ? e.message : "No se pudo completar la operación.";
 
-export function RecordsWorkspace({clinic}:{clinic:string}) {
+export function RecordsWorkspace({clinic,fromAgenda}:{clinic:string;fromAgenda:boolean}) {
   const [section,setSection]=useState<"consulta"|"crear">("consulta");
   const [editor,setEditor]=useState<Stored|null>(null);
   const [viewing,setViewing]=useState<Stored|null>(null);
@@ -53,6 +53,27 @@ export function RecordsWorkspace({clinic}:{clinic:string}) {
       await pause(seconds*1000+200);
     }
   },[clinic]);
+  const agendaTarget=useRef<{id:string;edit:boolean}|null>(null);
+  useEffect(()=>{
+    if(!fromAgenda) return;
+    const controller=new AbortController();
+    const key="agenda-expediente-"+clinic;
+    const target=sessionStorage.getItem(key);
+    if(target) {
+      sessionStorage.removeItem(key);
+      const [mode,id]=target.split("/");
+      agendaTarget.current={id,edit:mode==="edit"};
+    }
+    const pending=agendaTarget.current;
+    if(pending) {
+      api<Stored[]>("read",{ids:[pending.id]},false,controller.signal).then(([entry])=>{
+        if(controller.signal.aborted) return;
+        agendaTarget.current=null;
+        if(pending.edit) setEditor(entry); else setViewing(entry);
+      }).catch(e=>{if(!controller.signal.aborted) setError(errorText(e));});
+    }
+    return ()=>controller.abort();
+  },[api,clinic,fromAgenda]);
   useEffect(()=>{
     if(section!=="consulta" || editor || viewing) return;
     const controller=new AbortController();
@@ -184,7 +205,7 @@ export function RecordsWorkspace({clinic}:{clinic:string}) {
         <span>Página {pages.length}</span><button className="button secondary" disabled={blocked || rows.length<10} onClick={()=>{setLoading(true);setPages([...pages,rows[rows.length-1].id]);}}>Siguiente</button>
         <button className="text-button" disabled={busy} onClick={()=>{setError("");restart();}}>Actualizar consulta</button></div>
       {deleting && <div className="delete-records" role="group" aria-label="Confirmar eliminación"><strong>¿Eliminar {deleting.length} {deleting.length===1?"expediente":"expedientes"}?</strong>
-        <p>Se eliminarán también sus datos clínicos y movimientos. Esta acción es permanente.</p>
+        <p>Se eliminarán también sus citas, datos clínicos y movimientos. Esta acción es permanente.</p>
         <div className="record-actions"><button disabled={busy} className="button danger" onClick={()=>remove(deleting)}>Confirmar eliminación</button>
         <button className="button secondary" disabled={busy} onClick={()=>setDeleting(null)}>Cancelar eliminación</button></div></div>}
     </section>}

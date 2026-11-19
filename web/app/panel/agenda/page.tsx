@@ -1,2 +1,15 @@
 import { getClinics } from "../../../lib/clinics";
-export default async function Agenda() { const { active } = await getClinics(); return <><div className="page-heading"><div><span className="eyebrow">TU ESPACIO DE TRABAJO</span><h1>Agenda<span className="heading-dot">.</span></h1><p>{active?.name ?? "Selecciona o crea un consultorio para comenzar."}</p></div></div><section className="empty-state"><span className="empty-icon">▦</span><h2>Un espacio para organizar tus citas</h2><p>La agenda estará disponible en una próxima etapa. Por ahora, puedes preparar tu equipo desde Consultorios.</p><a href="/panel/consultorios" className="button secondary">Ir a Consultorios</a></section></>; }
+import { clinicToday } from "../../../lib/agenda";
+import { AgendaWorkspace } from "./agenda-workspace";
+import "../expedientes/records.css";
+import "./agenda.css";
+
+export default async function Agenda() {
+  const {active}=await getClinics();
+  return <>
+    <div className="page-heading"><div><h1>Agenda<span className="heading-dot">.</span></h1><p>{active?.name}</p></div></div>
+    {active ? <AgendaWorkspace key={active.id} clinic={active.id} today={clinicToday()}/> :
+      <section className="empty-state"><h2>Selecciona o crea un consultorio</h2>
+        <a href="/panel/consultorios" className="button secondary">Ir a Consultorios</a></section>}
+  </>;
+}

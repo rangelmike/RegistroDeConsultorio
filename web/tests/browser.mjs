@@ -1,5 +1,6 @@
 import { chromium, expect } from '@playwright/test';
 import { verifyRecords } from './records-browser.mjs';
+import { verifyAgenda, verifyCompetingBookings } from './agenda-browser.mjs';
 import { spawn } from 'node:child_process';
 import { mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
@@ -60,11 +61,15 @@ try {
   await dialog.getByRole('button',{name:'Crear consultorio',exact:true}).click();
   await expect(dialog).not.toBeVisible({timeout:20000});
   await page.getByLabel('CONSULTORIO ACTIVO').selectOption({label:'Consultorio Alameda Norte'});
+  const secondClinic=(await (await api(owner,'clinics?select=id,name')).json()).find(c=>c.name==='Consultorio Bosque');
+  await verifyCompetingBookings(api,owner,secondClinic.id);
   await expect(page.getByRole('heading',{name:'Consultorio Alameda Norte',exact:true}).last()).toBeVisible();
   await page.getByRole('link',{name:'Agenda',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Agenda.'})).toBeVisible();
   await expect(page.getByLabel('CONSULTORIO ACTIVO')).toHaveValue(clinicId);
+  await verifyAgenda(page,owner.email.split('@')[0]);
   await page.getByRole('link',{name:'Expedientes',exact:true}).click();
+  await expect(page).toHaveURL(base+'/panel/expedientes');
   await expect(page.getByRole('heading',{name:'Expedientes.'})).toBeVisible();
   await verifyRecords(page,memberPage,clinicId);
   await page.getByRole('link',{name:'Consultorios',exact:true}).click();
