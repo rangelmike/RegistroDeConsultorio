@@ -2,6 +2,21 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "2026-11-20-mobile-design-decision",
+      "reference": "Mensaje del usuario en este chat posterior a la creación aprobada de harness/design-decisions.md.",
+      "quote": "Optimiza el diseño para la vista en móvil, considerando que esa debe ser la prioridad, la vista en móvil, esta es una decisión fuerte.",
+      "scope": "Registrar la prioridad móvil en harness/design-decisions.md, su aprobación en harness/approvals.json y los hashes correspondientes en harness/integrity.json, conforme al permiso previo de mantener decisiones significativas. Implementar estilos móviles y cambiar el nombre visible de la aplicación sin modificar rutas ni backend.",
+      "reason": "Conservar una decisión de diseño transversal expresamente calificada como fuerte por el usuario y corregir la legibilidad del menú."
+    },
+    {
+      "id": "2026-11-20-frontend-design-and-design-decisions",
+      "reference": "Mensajes del usuario en este chat: autorización del lote de harness y petición posterior de incorporar la skill y su lock a integridad.",
+      "quote": "Incorporalos correctamente a a referencia de integridad y registra su aprobación",
+      "scope": "Aceptar .agents/skills/frontend-design/LICENSE.txt, .agents/skills/frontend-design/SKILL.md y skills-lock.json instalados por petición del usuario. Actualizar harness/approvals.json y harness/integrity.json. Crear harness/design-decisions.md y enlazar su lectura y mantenimiento en AGENTS.md conforme a la autorización anterior. Conservar los controles de producto existentes.",
+      "reason": "Restablecer la integridad tras la instalación autorizada y mantener decisiones visuales significativas para el rediseño dental solicitado.",
+      "priorQuote": "Autorizo los cambios que mencionas necesarios. Además añade al harness un archivo de decisiones de diseño y en AGENTS.md una ruta para ver y usar ese archivo, en el cual se deben registrar las decisiones más importantes y significativas que se hacen respecto al diseño de la app, esto es, cambios de tema, de colores, de estilo, se registran, cambios menores como el color de un botón, o el tamaño de un área no se registran. Redacta el archivo, las instrucciones para leerlo y editarlo de manera que sean claras para leer para un agente."
+    },
+    {
       "id": "2026-11-18-local-startup-commands",
       "reference": "Mensaje del usuario que solicita documentar en el harness los comandos de inicialización de Next dev y Supabase local.",
       "quote": "En caso de que no esté aún en ningún lado, pon en el harness los comandos de inicialización que me dijiste y cualquier otro que sea necesario (el de inicio de servidor local de dev para next y el de docker para supabase local)",

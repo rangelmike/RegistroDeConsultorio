@@ -9,7 +9,7 @@ export default async function Home({
 
   return (
     <main className="login-page">
-      <div className="login-brand"><span className="brand-mark">+</span>ConsultorioRegistro</div>
+      <div className="login-brand"><span className="brand-mark">+</span>Expedientes y agenda virtual</div>
       <section className="login-card">
       <span className="eyebrow">BIENVENIDO A TU ESPACIO</span>
       <h1>Cuidar empieza<br />por conectar<span className="heading-dot">.</span></h1>
@@ -20,7 +20,7 @@ export default async function Home({
       <GoogleSignIn />
       <span className="login-note">Accede con tu cuenta de Google</span>
       </section>
-      <footer className="login-footer">ConsultorioRegistro · Un espacio para cuidar, juntos.</footer>
+      <footer className="login-footer">Expedientes y agenda virtual · Un espacio para cuidar, juntos.</footer>
     </main>
   );
 }

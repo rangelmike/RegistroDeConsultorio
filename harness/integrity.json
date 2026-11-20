@@ -1,6 +1,8 @@
 {
   "schemaVersion": 1,
   "files": {
+    ".agents/skills/frontend-design/LICENSE.txt": "eb3d7b5485466acbd81f2b496f595ab637d2792e268206b27d99e793bdb67549",
+    ".agents/skills/frontend-design/SKILL.md": "b8009ae690dfa69edc7f08bb8715f32db8817112cfa4388741dbaf876c237df8",
     ".agents/skills/harness-creator/agents/openai.yaml": "b10ac126fb4de231e01ba17dcb82a8069fa162a3288e6b9a14651462f0746197",
     ".agents/skills/harness-creator/evals/evals.json": "a48b90f0f270a781d3efe333c8c6bd993dfdb89990c42c05d23d55b34e72b98c",
     ".agents/skills/harness-creator/README-UK.md": "8c3d69ece8555e811ffa6118a82d87b75be8df8d897a5f1b5ca9da5f6ab02a47",
@@ -66,10 +68,11 @@
     ".agents/skills/supabase/CHANGELOG.md": "653a274669ff4d84eb3004ad379050cb73dbf75740df82ccb9768f29f0422190",
     ".agents/skills/supabase/references/skill-feedback.md": "85e688b56623f9250d23b60ea950dee740fd537980fc72178fe185eab76742b7",
     ".agents/skills/supabase/SKILL.md": "44f4cfefb57751abf9288fb2920de621c748964de1301db627dea725e187bccf",
-    "AGENTS.md": "f0b0d6bcd41d53fa0fc4949189d2ea159453ac19c3c9b62dc4663826fcbbc90c",
+    "AGENTS.md": "7125ca6665f19545c80cb7dda91b2c218508a530599783abcf38a6f787f9e59a",
     "feature_list.json": "439ded035b7d754fd5fd8795508ec90442999944f2091106cba8adaedaf32ef5",
-    "harness/approvals.json": "f8ba26adb0623214373a91b1c87dd951d35533f93c49bb47f6a8ef65fbc20bd6",
+    "harness/approvals.json": "c8ce67a4db5594969a41413c3f836e1d8f2130d7447817ba6eb3ec6b4485a449",
     "harness/checks.json": "2c979d93e66b78d568ba8d5f0f5ea7009c2d19732ce987a75ecbf951a26d604e",
+    "harness/design-decisions.md": "28f2873d162a5e043d8d148200f38ce00b442a3f2e62f11a078c249287614227",
     "harness/evidence.md": "2d0715f33601ff12e6df1149a7349999cfbe39060d551d98b3211f4adcc558fc",
     "harness/governance.md": "44f75d63ec0639cc4f2181b5b069bfe3d723daff9a4af52c9b863c9cde5bf1ca",
     "harness/project.md": "b763ddf248bbab83653a0a86a9506c0a2c7e2073927430217c8cc24d3e66089f",
@@ -79,7 +82,7 @@
     "init.sh": "2c80f931ab8898908cf4f574980a6cd3bff2cb886b221c2b8e59e41d1b7cdaeb",
     "progress.md": "e14a837f20ab02a471825e7337f63ae3add30b0e176d821bbeaf2923d4b23c84",
     "session-handoff.md": "caa7990d2f0d327a345a7773c026dce00dacc02fe4e3a094cb5c07f9a285693f",
-    "skills-lock.json": "706d939c027eac6b649079ae2ec7152bc42e13793dd1f7ce51b980cc1900017f"
+    "skills-lock.json": "1186c65d573782d968c6e402a93d7aff83e48df24e050111e93e784fd8590c3d"
   },
-  "digest": "7e71d94ff3dd591fb3751bb502562b94d765da3a19976afa095bce134ddd05c0"
+  "digest": "5fbce87a3222bff3a36e7608d4eb4d7b57e3d9479e2cf7a08088ffa211221ba1"
 }

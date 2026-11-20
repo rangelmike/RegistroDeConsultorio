@@ -52,7 +52,7 @@ export async function verifyRecords(page,memberPage,clinicId) {
 
   const single=await exported(button('Exportar JSON',row('Paciente sintético Alfa')));
   assert.equal(single.expedientes[0].campos.fecha,'2026-11-18');
-  await button('Ver expediente',row('Paciente sintético Alfa')).click();
+  await button('Ver expediente de Paciente sintético Alfa',row('Paciente sintético Alfa')).click();
   const viewer=page.locator('.record-viewer');
   await expect(viewer.getByText('18/11/2026',{exact:true})).toBeVisible();
   await button('Datos dentales',viewer).click();

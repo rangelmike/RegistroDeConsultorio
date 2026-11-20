@@ -42,10 +42,107 @@
 .tooth-row [aria-pressed=true] { background: var(--green); color: white; }
 .account-totals { display: flex; gap: 20px; flex-wrap: wrap; }
 .account-totals dd { margin: 0; font-weight: bold; }
+.records-space{gap:24px}
+.record-tabs{gap:8px;border-bottom-color:var(--line);overflow-x:auto}
+.record-tabs button{color:#645675;border-radius:10px 10px 0 0;min-height:46px;white-space:nowrap}
+.record-tabs button:hover{background:#f2ecfa;color:#4c2d75}
+.record-tabs [aria-current=page]{background:#eee5f8;color:#523080;border-bottom-color:#7651ae}
+.record-fields{gap:18px 22px}.clinical-section{padding:20px 0}.clinical-section summary{color:#503080;font-size:15px;padding:9px 0}
+.record-rows li{padding:18px 8px;border-radius:10px}.record-rows li:hover{background:#faf7fe}
+.record-check input{accent-color:var(--green)}.record-person span{font-size:13px}
+.record-information{gap:22px 28px}.record-information dt{font-size:13px}.record-information dd{font-size:15px;color:var(--ink)}
+.payments-table th{background:#f1ebf8;color:#49316d}.payments-table tr:hover td{background:#fcfaff}
+.record-editor .arch,.record-editor .account-row{border-radius:12px;background:#fcfaff;padding:16px}
+.tooth-row button{border-color:#cdbfe0;border-radius:7px;min-height:34px}.tooth-row button:hover{background:#eee5f8}
+.tooth-row [data-marked=true]{border-color:#7651ae;background:#e8dbf8}.tooth-row [aria-pressed=true]{background:#6540a3;color:#fff}
+.account-totals{padding:14px 0}.account-totals dd{color:#503080;font-size:17px}
+.record-rows{display:grid;gap:10px}
+.record-rows li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;border:1px solid #ded2ee;border-radius:14px;background:linear-gradient(110deg,#fff 62%,#faf6ff);transition:border-color .16s,box-shadow .16s,transform .16s}
+.record-rows li:hover,.record-rows li:focus-within{background:#faf6ff;border-color:#a582d2;box-shadow:0 5px 20px #5c368d16;transform:translateY(-1px)}
+.record-rows li:has(.record-check input:checked){border-color:#7651ae;background:#f5edff}
+.record-check{display:flex;align-items:center;justify-content:center;padding:10px}
+.record-check input{width:20px;height:20px}
+.record-person{display:flex;align-items:center;gap:14px;min-height:58px;width:100%;padding:4px 8px;border:0;border-radius:10px;background:transparent;text-align:left;cursor:pointer;color:var(--ink)}
+.record-person:hover{background:#eee5f8}.record-person:disabled{cursor:wait}
+.record-monogram{display:grid!important;place-items:center;flex:none;width:40px;height:40px;border-radius:12px;background:#e8daf7;color:#593587;font-size:17px;font-weight:700}
+.record-person-details{display:block;flex:1;min-width:0}.record-person-details strong{display:block;font-size:15px;line-height:1.3;overflow-wrap:anywhere}
+.record-person-details>span{display:block;color:var(--muted);font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.record-open{display:grid!important;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;background:#ede2fa;color:#68449b;font-size:24px;line-height:1}
+.row-actions{gap:2px;justify-content:flex-end}.row-actions button{font-size:12px;min-height:36px;padding:5px 7px}
 @media(max-width:700px) {
   .record-tabs button { flex: 1; padding-inline: 6px; }
   .record-rows li { flex-wrap: wrap; }
   .row-actions { width: 100%; padding-left: 24px; }
   .tooth-row { grid-template-columns: repeat(8,minmax(0,1fr)); }
   .record-import input { max-width: 100%; }
+}
+@media(max-width:760px){
+ .records-space{gap:16px}
+ .record-tabs{gap:2px;scrollbar-width:thin}
+ .record-tabs button{flex:0 0 auto;min-height:48px;padding:10px 13px;font-size:13px}
+ .record-actions,.record-downloads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+ .record-actions .button,.record-downloads .button{width:100%;white-space:normal;text-align:center;min-height:44px}
+ .record-fields,.record-information{grid-template-columns:minmax(0,1fr);gap:15px}
+ .record-rows li{gap:10px;padding:16px 8px}
+ .record-rows li{grid-template-columns:auto minmax(0,1fr);padding:10px 12px}
+ .record-person{gap:10px;padding:5px 2px;min-height:62px}
+ .record-monogram{width:38px;height:38px}
+ .row-actions{display:grid;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;padding-left:0;border-top:1px solid var(--line);padding-top:7px}
+ .row-actions .button,.row-actions button{min-height:44px;white-space:normal}
+ .record-editor .arch,.record-editor .account-row{padding:12px 8px}
+ .tooth-row{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+ .tooth-row button{min-height:42px;font-size:13px}
+ .payments-table{margin-inline:-6px}.payments-table th,.payments-table td{padding:10px}
+}
+/* Lectura del expediente: secciones claras y movimientos adaptados a móvil. */
+.record-viewer{padding:clamp(18px,3vw,36px)}
+.viewer-heading{align-items:flex-start;gap:16px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.viewer-heading h2{font-size:clamp(23px,3vw,32px);line-height:1.2;margin:4px 0}
+.viewer-heading p{font-size:15px;color:#5b5070}
+.viewer-kicker{display:block;font-size:13px;font-weight:700;color:#69449a}
+.viewer-heading .record-actions{margin:0;justify-content:flex-end}
+.record-viewer>.record-tabs{margin:0 0 24px;position:sticky;top:0;z-index:4;background:#fff;padding-top:8px}
+.record-viewer>.record-tabs button{font-size:14px;padding:12px 18px}
+.viewer-sections{display:grid;gap:16px}
+.record-viewer .view-section{margin:0;padding:22px;border:1px solid #dfd4ed;border-radius:15px;background:#fcfaff}
+.record-viewer .view-section h3{font-size:18px;color:#382455;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid #e8dff2}
+.record-viewer .record-information{grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:10px}
+.record-viewer .record-information>div{padding:11px 13px;background:#fff;border:1px solid #eee8f5;border-radius:10px}
+.record-viewer .record-information dt{font-size:12px;font-weight:650;color:#655878}
+.record-viewer .record-information dd{margin-top:4px;font-size:15px;font-weight:600;line-height:1.5}
+.record-viewer .record-information .unrecorded dd{color:#8c8496;font-weight:400}
+.record-viewer .tooth-row{margin:8px 0;gap:5px}.record-viewer .tooth-row button{min-height:38px}
+.record-viewer .selected-tooth{margin-top:20px;padding:16px;border-radius:13px;background:#efe7fa}
+.record-viewer .selected-tooth h4{margin:0 0 12px;color:#4d2c79;font-size:16px}
+.record-viewer .account-totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 22px;padding:0}
+.record-viewer .account-totals>div{padding:16px;border-radius:12px;background:#fff;border:1px solid #e5dcf1}
+.record-viewer .account-totals dt{font-size:12px;color:#635776}.record-viewer .account-totals dd{font-size:clamp(16px,2vw,22px);overflow-wrap:anywhere}
+.record-viewer .account-totals>div:last-child{background:#e9dbf8;border-color:#cdb5eb}
+.record-viewer .payments-table{border:1px solid #e5dcf1;border-radius:12px;background:#fff}
+.record-viewer .payments-table th{font-size:12px;white-space:nowrap}.record-viewer .payments-table td{vertical-align:top;overflow-wrap:anywhere}
+.viewer-empty{padding:25px;border:1px dashed #c7b3df;border-radius:12px;text-align:center;background:#fff}
+@media(max-width:760px){
+ .record-viewer{padding:18px 12px}
+ .viewer-heading{display:block;padding-bottom:17px}
+ .viewer-heading .record-actions{display:grid;grid-template-columns:1fr 1fr;margin-top:18px;gap:8px}
+ .viewer-heading .record-actions .button{white-space:normal;padding:10px;font-size:12px}
+ .record-viewer>.record-tabs{margin-bottom:17px}
+ .record-viewer>.record-tabs button{flex:1;min-width:0;padding:10px 5px;font-size:12px;white-space:normal;line-height:1.25}
+ .viewer-sections{gap:12px}
+ .record-viewer .view-section{padding:17px 12px}
+ .record-viewer .view-section h3{font-size:17px;margin-bottom:12px}
+ .record-viewer .record-information{grid-template-columns:minmax(0,1fr);gap:7px}
+ .record-viewer .record-information>div{padding:10px 12px}
+ .record-viewer .account-totals{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .record-viewer .account-totals>div{padding:12px}
+ .record-viewer .account-totals>div:last-child{grid-column:1/-1}
+ .record-viewer .payments-table{overflow:visible;border:0;background:transparent}
+ .record-viewer .payments-table table,.record-viewer .payments-table tbody{display:block;width:100%}
+ .record-viewer .payments-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+ .record-viewer .payments-table tr{display:grid;gap:0;margin-bottom:12px;padding:12px;border:1px solid #ded0ee;border-radius:12px;background:#fff}
+ .record-viewer .payments-table td{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;min-width:0;padding:8px 2px;text-align:right;border-bottom:1px solid #f0ebf5}
+ .record-viewer .payments-table td:last-child{border:0}
+ .record-viewer .payments-table td::before{content:attr(data-label);flex:0 0 38%;text-align:left;color:#665879;font-size:12px;font-weight:650}
+ .record-viewer .payments-table td:nth-child(2){font-weight:700;color:#3b275b}
+ .record-viewer .payments-table td:nth-child(5){color:#553184;font-weight:700}
 }

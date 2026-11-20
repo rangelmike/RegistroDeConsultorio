@@ -5,6 +5,54 @@ label{display:block;font-size:12px;font-weight:600}input,textarea,select{display
 .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;background:radial-gradient(ellipse at 75% 30%,#e6dded 0,transparent 45%),#f5f1f8;padding:100px 24px}.login-brand{position:absolute;left:48px;top:35px;display:flex;align-items:center;gap:12px;font-family:Manrope,Arial,sans-serif;font-weight:700;letter-spacing:-.6px}.login-card{padding:50px 40px;text-align:center;max-width:550px;width:100%}.login-card h1{font-size:48px;letter-spacing:-2px;line-height:1.2}.login-card>p{font-size:16px;line-height:1.8;margin:22px 0 32px}.google-button{background:white;border-color:#ddd5e4;min-width:270px;font-size:14px;box-shadow:0 4px 10px #38204a10}.google-g{font-size:18px;font-weight:700;color:#4285f4;margin-right:12px}.login-note{display:block;color:#968aa0;font-size:11px;margin-top:16px}.login-footer{position:absolute;bottom:27px;font-size:10px;color:#90839a}
 @media(min-width:1550px){.page-content{padding-top:60px}.clinic-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:1200px){.sidebar{width:225px;padding:30px 17px}.workspace-body{margin-left:225px}.page-content{padding:32px 28px}.topbar{padding:0 28px}.clinic-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.details-grid{grid-template-columns:minmax(0,1fr)}.info-card{display:none}.page-heading{align-items:flex-start}h1{font-size:30px}.page-heading p{max-width:370px}.add-footer{align-items:flex-start}.workspace-footer{padding:20px 28px}}@media(max-width:760px){.workspace{display:block}.sidebar{position:static;width:100%;padding:18px 20px;gap:15px;border-right:0;border-bottom:1px solid var(--line)}.brand{font-size:13px}.brand-light{display:inline;font-size:13px;text-transform:none;letter-spacing:0;color:inherit}.brand-mark{width:28px;height:30px;font-size:25px}.switcher{margin:0}.switcher label{margin:0}.switch-hint{display:none}.sidebar nav{display:flex;gap:5px}.nav-link{flex:1;font-size:12px;padding:8px;justify-content:center;gap:6px}.nav-link>span{font-size:17px;width:auto}.sidebar-bottom{margin:0;padding:0;position:absolute;right:20px;top:20px}.account{display:none}.signout{padding:5px;font-size:10px;gap:8px}.workspace-body{margin:0}.topbar{height:47px;padding:0 20px}.topbar>span{font-size:8px;letter-spacing:1px}.topbar>div{font-size:10px}.page-content{padding:28px 20px}.page-heading{display:block;margin-bottom:28px}.page-heading .button{margin-top:20px}.page-heading h1{font-size:32px}.page-heading p{font-size:12px}.section-label>span{display:none}.clinic-grid{gap:12px}.clinic-card{padding:17px 14px 0}.card-top{display:block;margin-bottom:14px}.card-top .badge{margin-top:10px}.clinic-card h3{font-size:14px}.clinic-card p{font-size:10px}.clinic-icon{width:32px;height:32px}.settings-card{padding:22px 17px}.section-heading{align-items:flex-start}.section-heading h2{font-size:18px}.section-heading .eyebrow{font-size:8px}.rename-form label{min-width:100%;}.rename-form .button{width:100%}.add-footer{display:block}.add-footer .button{margin-top:12px;width:100%}.member-info strong{font-size:10px}.member-actions form{max-width:85px}.avatar{width:30px;height:30px}.workspace-footer{padding:20px}.workspace-footer span{display:none}.login-brand{left:24px;top:25px}.login-card{padding:35px 0}.login-card h1{font-size:41px}.login-footer{font-size:9px}.modal{padding:23px}.form-footer .button{padding:10px 14px}.empty-state{padding:45px 18px}.empty-state h2{font-size:20px}}
 .sidebar[hidden]{display:none}
+/* Identidad visual dental: claridad clínica y acentos lavanda. */
+:root{--bg:#f4f1fb;--ink:#251d3b;--muted:#625b76;--green:#6540a3;--line:#ded7ec;--soft:#ebe4f7;--white:#fff;--danger:#a53d48}
+body{background:var(--bg);color:var(--ink);font-family:Arial,"Segoe UI",sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3,.brand,.login-brand{font-family:"Trebuchet MS","Segoe UI",sans-serif}
+h1{font-size:clamp(2rem,3.2vw,3.25rem);line-height:1.12;letter-spacing:-.045em;font-weight:700}
+h2{letter-spacing:-.025em}p{color:var(--muted)}
+:focus-visible{outline:3px solid #9d70e3;outline-offset:3px}
+.button{border-radius:12px;padding:11px 18px;min-height:44px;transition:background-color .16s,border-color .16s,transform .16s}
+.button:hover:not(:disabled){transform:translateY(-1px)}
+.primary{background:var(--green);color:#fff;box-shadow:none}.primary:hover{background:#503080}
+.secondary{border-color:#cfc3e2;background:#fff;color:#503378}.secondary:hover{background:#f2ecfa}
+.danger{background:#a53d48;color:#fff}.danger:hover{background:#8b303b}
+.workspace{background:var(--bg)}.workspace-body{background:radial-gradient(circle at 92% 0%,#e8dafa 0,transparent 31%),var(--bg)}
+.workspace .sidebar{background:#352257;color:#f8f5ff;border-right:0;box-shadow:12px 0 38px #28154922}
+.workspace .sidebar .switcher label{color:#d7c7ee;font-size:11px;letter-spacing:.02em}
+.workspace .sidebar .switcher select{background:#493169;color:#fff;border:1px solid #755b99;border-radius:11px}
+.workspace .sidebar .switch-hint{color:#d1c3df;font-size:11px}
+.workspace .sidebar .nav-link{color:#e2d6ef;border-radius:12px;font-weight:600}
+.workspace .sidebar .nav-link:hover{background:#4b3370;color:white}
+.workspace .sidebar .nav-link.active{background:#a782de;color:#1e1530;box-shadow:inset 3px 0 #f1e3ff}
+.workspace .sidebar .account{border-color:#684f86}.workspace .sidebar .account strong,.workspace .sidebar .signout{color:#fff}.workspace .sidebar .account div>span{color:#d2c3e2}
+.workspace .sidebar .avatar{background:#bd9be8;color:#28183f}.workspace .sidebar .signout:hover{color:#e4ceff}
+.sidebar-toggle{background:#352257;color:white;border-color:#352257;border-radius:12px;box-shadow:0 8px 25px #2f1f5233;font-weight:700}
+.sidebar-toggle:hover{background:#4b3176}
+.page-content{max-width:1440px}.workspace .page-content{padding-top:90px}
+.page-heading{margin-bottom:30px;padding-bottom:23px;border-bottom:1px solid #d7cce9}.page-heading p{font-size:15px;margin-top:7px}
+.heading-dot{color:#a77adc}.eyebrow{color:#73579a;font-size:12px;letter-spacing:.02em;text-transform:none}
+.settings-card,.clinic-card,.week-card,.record-list,.record-editor,.record-viewer,.record-import,.availability-day{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 30px #3822590a}
+.settings-card{padding:clamp(20px,3vw,34px)}.clinic-card{padding:24px 23px 0}
+.clinic-card.selected{background:#faf7ff;border-color:#8e67c6;box-shadow:0 0 0 2px #aa83d53d}
+.clinic-icon{background:#e7d9f7;color:#5f388f;border-radius:12px}.badge{background:#e9ddf8;color:#4d2b79;font-size:11px;border-radius:7px}.badge.neutral{background:#f1eef6;color:#655d70}
+.clinic-card h3{font-size:17px}.clinic-card p{font-size:13px}.card-select{font-size:13px;color:#56377f;min-height:48px}
+.info-card{background:#e9e0f5;border-color:#d5c5e9;border-radius:18px}.info-card h3{color:#352257}.info-card>p,.info-point p{color:#514365}
+.section-label h2,.members-heading h3{font-size:15px}.section-label h2>span{font-size:12px}
+label{font-size:13px}input,textarea,select{background:#fff;border:1px solid #cfc5df;border-radius:10px;min-height:44px;padding:10px 13px;color:var(--ink)}
+input:focus,textarea:focus,select:focus{border-color:#8055bd;box-shadow:0 0 0 3px #ae86de2e;outline:0}
+input::placeholder,textarea::placeholder{color:#807889;font-size:13px}
+.notice,.record-message,.record-error,.delete-records,.import-preview{border-radius:11px}.notice.success,.record-message,.import-preview{background:#eee6f8;color:#463067}.notice.error,.record-error,.delete-records{background:#fbecee;color:#862f3b}
+.empty-state{border:1px dashed #bda5dd;border-radius:18px;background:#fbf9ff}.empty-icon{color:#7650a7}
+.modal{border-radius:20px;border-color:#d5c7e8;box-shadow:0 25px 90px #21103644}.modal::backdrop{background:#26143c88}
+.workspace-footer{color:#6f6480;border-color:#d8cfea;font-size:11px}
+.login-page{background:radial-gradient(circle at 78% 24%,#c6a8ed 0,transparent 34%),radial-gradient(circle at 7% 90%,#e3d5f5 0,transparent 31%),#f4f0fa}
+.login-page::after{content:"";position:absolute;right:7%;bottom:12%;width:clamp(150px,22vw,310px);aspect-ratio:1;border:28px solid #fff8;border-radius:48% 52% 42% 58% / 44% 47% 53% 56%;transform:rotate(-22deg);pointer-events:none}
+.login-brand{font-size:18px;color:#352257}.brand-mark{background:#6540a3;border-radius:13px;width:40px;height:40px;font-size:32px}
+.login-card{position:relative;z-index:1;background:#fff;border:1px solid #e3d8f0;border-radius:28px;box-shadow:0 25px 80px #38225918;max-width:590px;text-align:left;padding:clamp(30px,5vw,60px)}
+.login-card h1{font-size:clamp(2.6rem,5vw,4.2rem);line-height:1.06}.login-card>p{font-size:18px;line-height:1.55;max-width:33ch}.google-button{box-shadow:none;border-color:#bba8d5;border-radius:12px}
+.login-note{font-size:12px;color:#665d75}.login-footer{color:#5f5470;font-size:11px}
+@media(max-width:760px){.workspace .sidebar{box-shadow:10px 0 34px #21153650}.workspace .page-content{padding:76px 16px 28px}.page-heading{padding-bottom:18px}.login-page{padding:95px 18px 55px}.login-page::after{display:none}.login-card{padding:32px 25px}.login-card h1{font-size:2.7rem}.clinic-card{padding:20px 18px 0}.settings-card{padding:20px 16px}}
 .sidebar-toggle{position:fixed;top:12px;left:16px;z-index:42;display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:white;box-shadow:0 2px 8px #30203c12}
 .sidebar-toggle span{font-size:22px;line-height:1}
 .workspace .sidebar{position:fixed;inset:0 auto 0 0;width:256px;height:100dvh;padding:70px 20px 20px;overflow-y:auto;z-index:41;flex-direction:column;gap:16px;background:#fdfbfe}
@@ -41,4 +89,38 @@ label{display:block;font-size:12px;font-weight:600}input,textarea,select{display
  .card-top{display:flex}
  .card-top .badge{margin-top:0}
  .member-info strong{font-size:13px}
+}
+/* La navegación conserva la misma identidad cuando se abre el menú lateral. */
+.workspace .sidebar{background:#352257;color:#f8f5ff;border-right:0;box-shadow:12px 0 38px #28154922}
+.workspace .sidebar .switcher select{background:#493169;color:#fff;border:1px solid #755b99;border-radius:11px}
+.workspace .sidebar .nav-link{color:#e2d6ef;border-radius:12px}
+.workspace .sidebar .nav-link.active{background:#a782de;color:#1e1530}
+.workspace .sidebar .account{border-color:#684f86}.workspace .sidebar .account strong,.workspace .sidebar .signout{color:#fff}
+.workspace .sidebar .account div>span{color:#d2c3e2}
+.workspace .page-content{padding-top:90px}
+@media(max-width:760px){.workspace .page-content{padding:76px 16px 28px}}
+.sidebar-toggle,.workspace .sidebar-toggle{background:#352257;color:#fff;border:1px solid #352257;border-radius:12px;box-shadow:0 8px 25px #2f1f5233;font-weight:700}
+.sidebar-toggle:hover{background:#4b3176;color:#fff}
+@media(max-width:760px){
+ .sidebar-toggle{top:10px;left:12px;min-height:48px;padding:8px 16px;font-size:15px}
+ .workspace .page-content{padding:78px 16px 28px}
+ .page-heading h1{font-size:clamp(28px,8vw,38px)}
+ .page-heading p{font-size:14px;line-height:1.5}
+ .page-heading .button,.record-actions .button,.record-downloads .button{min-height:44px}
+ .section-label{align-items:flex-start}.section-label h2{font-size:16px}
+ .clinic-grid{grid-template-columns:1fr;gap:14px}
+ .clinic-card{padding:20px 18px 0}.clinic-card h3{font-size:17px}.clinic-card p{font-size:13px}
+ .details-grid{display:grid;grid-template-columns:minmax(0,1fr)}
+ .settings-card{padding:20px 16px}.member-actions form{max-width:none;justify-content:flex-end}
+ .members li{align-items:flex-start;flex-wrap:wrap}.member-actions{margin-left:40px}
+ .add-footer{display:grid;gap:10px}.add-footer .button{width:100%;margin:0}
+ .login-page{align-items:stretch;padding:100px 16px 64px}
+ .login-brand{left:18px;right:18px;top:25px;font-size:14px;line-height:1.2}
+ .login-brand .brand-mark{flex:none}
+ .login-card{padding:32px 24px;max-width:none}.login-card h1{font-size:clamp(34px,10vw,46px)}
+ .login-card>p{font-size:16px}.google-button{width:100%;min-width:0;white-space:normal}
+ .login-footer{left:18px;right:18px;text-align:center;font-size:11px}
+ .form-footer{display:grid;grid-template-columns:1fr 1fr}.form-footer .button{white-space:normal}
+ .modal{width:calc(100% - 24px);max-height:calc(100dvh - 32px);overflow:auto;padding:22px 18px}
+ .empty-state{padding:38px 20px}
 }

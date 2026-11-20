@@ -196,7 +196,7 @@ export function RecordsWorkspace({clinic,fromAgenda}:{clinic:string;fromAgenda:b
       {loading?<p role="status">Buscando expedientes…</p>:rows.length===0?<p>{search?"No hay coincidencias.":"Todavía no hay expedientes en este consultorio."}</p>:
       <ul className="record-rows">{rows.map(row=><li key={row.id}>
         <label className="record-check"><input type="checkbox" checked={selected.includes(row.id)} disabled={busy} aria-label={"Seleccionar "+row.nombre} onChange={e=>{setDeleting(null);setSelected(e.target.checked?[...selected,row.id]:selected.filter(id=>id!==row.id));}}/></label>
-        <div className="record-person"><strong>{row.nombre}</strong><span>{row.telefono}</span></div>
+        <button className="record-person" type="button" disabled={busy} aria-label={"Ver expediente de "+row.nombre} onClick={()=>openRecord(row.id,setViewing)}><span className="record-monogram" aria-hidden="true">{row.nombre.trim().slice(0,1).toLocaleUpperCase("es")}</span><span className="record-person-details"><strong>{row.nombre}</strong><span>{row.telefono}</span></span><span className="record-open" aria-hidden="true">›</span></button>
         <div className="row-actions"><button className="text-button" disabled={busy} onClick={()=>openRecord(row.id,setViewing)}>Ver expediente</button><button className="text-button" disabled={busy} onClick={()=>openRecord(row.id,setEditor)}>Editar</button>
         <button className="text-button" disabled={busy} onClick={()=>exportRecords([row.id])}>Exportar JSON</button>
         <button className="text-danger" disabled={busy} onClick={()=>setDeleting([row.id])}>Eliminar</button></div>

@@ -2,7 +2,7 @@
 
 ## Startup Workflow
 
-1. Leer este archivo, `harness/governance.md`, `harness/project.md`, `feature_list.json`, `progress.md` y `session-handoff.md` antes de escribir.
+1. Leer este archivo, `harness/governance.md`, `harness/project.md`, `harness/design-decisions.md`, `feature_list.json`, `progress.md` y `session-handoff.md` antes de escribir.
 2. Ejecutar `node harness/verify.mjs`. También disponible mediante `./init.ps1` o `bash init.sh`. Investigar cualquier fallo antes de editar. Nunca regenerar la referencia para ocultarlo.
 3. Contrastar el estado persistido con los archivos reales y la autorización actual. Revisar cambios locales.
 4. La autorización inicial cubre exclusivamente crear este harness. El desarrollo requiere una solicitud posterior.
@@ -17,6 +17,13 @@
 - Verificar el harness no autoriza infraestructura, deploy, migraciones remotas ni gastos.
 - No modificar código que no esté relacionado con la función en la que se está trabajando.
 - Google es el único proveedor de autenticación, Supabase almacena datos y AWS aloja el despliegue. Aplicar el contrato de seguridad de `harness/project.md`.
+
+## Decisiones de diseño
+
+- Consultar `harness/design-decisions.md` antes de modificar la presentación. Aplicar las decisiones vigentes y usar la skill `frontend-design` en el rediseño autorizado.
+- Registrar allí cambios significativos de tema, paleta global, tipografía, identidad o estilo de la app. Excluir ajustes locales como el color de un botón, espaciado o tamaño de un área.
+- Seguir el formato y el procedimiento de actualización del archivo. Es parte del harness: su edición y la actualización de integridad requieren autorización conforme a `harness/governance.md`; una tarea visual por sí sola no concede permiso de edición permanente.
+- En este rediseño, preservar backend, funcionalidad y rutas existentes. El registro documenta decisiones visuales y no amplía el alcance de implementación.
 
 ## Definition of Done
 
