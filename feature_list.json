@@ -133,6 +133,50 @@
         "Respaldo, retención y preparación para datos reales acordados con responsable."
       ],
       "evidence": []
+    },
+    {
+      "id": "vector-odontogram",
+      "name": "Odontograma vectorial por expediente",
+      "description": "Plantilla compartida y trazos vectoriales privados editables con ratón, tacto y lápiz. Guardado transaccional y revisión del expediente.",
+      "dependencies": [
+        "records"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Plantilla aportada preservada y versionada. Dibujar, color, grosor, deshacer, borrar trazos, ampliar y desplazar en escritorio y móvil.",
+        "Documento y anotaciones se guardan juntos. Límites de 500 trazos, 10000 puntos y 256 KiB. Aislamiento, revisión, cuotas y cascada comprobados en Postgres real.",
+        "Persistencia y edición verificadas por puntos de entrada normales en navegador. JSON existente conserva su comportamiento."
+      ],
+      "evidence": [
+        {
+          "command": "node harness/verify.mjs --product",
+          "result": "passed",
+          "date": "2026-11-20",
+          "environment": "Windows; Node 24; PostgreSQL 17/Supabase local; Edge headless. Lint, tipos, build, 6 pruebas unitarias, 159 pgTAP, concurrencia y navegador. Persistencia al recargar, herramientas y eventos nativos simulados de lápiz/tacto. Sin despliegue ni dispositivo físico."
+        }
+      ]
+    },
+    {
+      "id": "payment-installments",
+      "name": "Abonos dentro de movimientos de pago",
+      "description": "Abonos fechados persistidos por movimiento y restas calculadas.",
+      "dependencies": [
+        "records"
+      ],
+      "status": "done",
+      "acceptance": [
+        "Agregar, editar y quitar abonos dentro de un movimiento sin nuevo tratamiento o costo.",
+        "Guardar y recargar abonos; resta por movimiento y global descuenta anticipo y abonos con centavos exactos.",
+        "Validación de fechas, cantidades y límites en servidor; compatibilidad anterior, JSON, permisos y revisión comprobados."
+      ],
+      "evidence": [
+        {
+          "command": "node harness/verify.mjs --product",
+          "result": "passed",
+          "date": "2026-11-20",
+          "environment": "Windows; Supabase/Postgres 17 local; Edge headless. Lint, tipos, build, 6 unitarias, 169 pgTAP, concurrencia y E2E de edición, cálculos, guardado, recarga y JSON con abonos. Sin despliegue remoto."
+        }
+      ]
     }
   ]
 }

@@ -1,5 +1,20 @@
 # Relevo
 
+## Abonos por movimiento — 20 de noviembre de 2026
+
+payment-installments done local. Modelo PaymentMovement con abonos opcionales (fecha y cantidad), cálculos compartidos en paymentTotals y validación ampliada de valid_dental_record. La migración 20261120215020_payment_installments.sql debe publicarse con el código cuando se solicite producción; está aplicada solo en local. No crea nuevas tablas ni cambia cuotas/permisos. Límite de 100 abonos por movimiento y 40000 bytes por expediente. Guardar cambios persiste los abonos; lectura los muestra dentro del tratamiento y el JSON los conserva. --product pasó todas las pruebas, incluidas 169 pgTAP, concurrencia y navegador. Aprobación 2026-11-20-payment-installments. Conservar los cambios locales previos de odontograma y orden de pagos.
+
+
+## Odontograma vectorial — 20 de noviembre de 2026
+
+Implementación local terminada y verificada: vector-odontogram done. Antes de continuar ejecutar node harness/verify.mjs y contrastar el diff. Autorización y evidencia: 2026-11-20-vector-odontogram; lote de siete archivos aprobado expresamente.
+
+El editor y la vista dental usan OdontogramCanvas con la plantilla estática web/public/odontograma-v1.jpg. Los trazos viven en clinic_private.odontogram_drawings, separados del JSON clínico. Se guardan junto con el expediente mediante dental_operation y su revisión; no se altera el intercambio JSON. Se conservaron los campos por pieza. Límite 500 trazos, 10000 puntos y 256 KiB.
+
+20261120192720_vector_odontogram.sql está aplicada solo en local. Se comprobó también su reproducción completa con rollback, sin reset. node harness/verify.mjs --product pasó lint, tipos, build, 6 pruebas unitarias, 159 pgTAP, concurrencia y navegador con herramientas, persistencia al recargar y regresiones completas. Harness 8/8, integridad 82 archivos y advisors locales sin hallazgos. Los eventos de lápiz/tacto son nativos de navegador simulados, sin dispositivo físico.
+
+No hubo commit, push ni migración remota. Al solicitar producción, aplicar también esta migración y seguir el procedimiento existente. Mantener pendiente la prueba real de Google por elección anterior del usuario. No modificar ni consumir autorizaciones de otros trabajos.
+
 ## Intervención remota de Expedientes — 18 de noviembre de 2026
 
 El usuario desplegó por GitHub en https://main.d2yobiyz2ic5av.amplifyapp.com y autorizó aplicar las tres migraciones existentes pendientes. Ya están aplicadas en el proyecto Supabase que coincide con la configuración del deploy: cuotas, expedientes y contabilización de cuotas. La API ya reconoce dental_operation.

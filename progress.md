@@ -1,5 +1,17 @@
 # Progreso
 
+## Abonos por movimiento — 20 de noviembre de 2026
+
+Implementación local terminada: añadir, editar y quitar hasta 100 abonos por movimiento, con fecha y cantidad positiva. Se guardan dentro del expediente y se conservan en JSON. Resta por movimiento y global = costo - anticipo - abonos. Consulta ordenada por fecha. Migración 20261120215020_payment_installments.sql aplicada solo en local. Lote autorizado 2026-11-20-payment-installments. --product pasó lint, tipos, build, 6 pruebas unitarias, 169 pgTAP, concurrencia y navegador; harness 8/8 y advisors locales sin hallazgos. Sin publicación remota.
+
+
+## Odontograma vectorial — 20 de noviembre de 2026
+
+- Implementación local del dibujo sobre plantilla compartida aportada por el usuario: ratón/tacto/lápiz, color, grosor, deshacer, borrar trazos, zoom y desplazamiento. Consulta de lectura ampliable; campos por pieza conservados.
+- Anotaciones separadas del documento, guardado transaccional con su revisión, cuotas existentes y cascada. Límites aprobados: 500 trazos, 10000 puntos y 256 KiB. JSON existente sin anotaciones ni cambios de formato.
+- Migración local aplicada. node harness/verify.mjs --product pasó: lint, tipos, build, 6 pruebas unitarias, 159 pgTAP, concurrencia y navegador. Harness 8/8 y 82 archivos íntegros; advisors locales sin hallazgos. vector-odontogram done local, sin verificaciones pendientes de esta función.
+- Autorización 2026-11-20-vector-odontogram cubre los siete archivos del lote. Evidencia en harness/evidence.md. Sin operación remota ni despliegue; Google real conserva su pendiente anterior.
+
 ## Incidencia de producción resuelta en base — 18 de noviembre de 2026
 
 - El usuario desplegó mediante Amplify. La API fallaba con PGRST202 porque faltaban tres migraciones remotas. Se aplicaron las tres tras aprobación explícita 2026-11-18-production-records-migrations.

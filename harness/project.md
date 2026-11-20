@@ -1,5 +1,13 @@
 # Contrato del proyecto
 
+## Odontograma vectorial — 20 de noviembre de 2026
+
+- Lote 2026-11-20-vector-odontogram. Usar Odontograma.jpg aportado por el usuario como plantilla estática compartida versionada. Guardar únicamente anotaciones en una tabla privada vinculada por consultorio y expediente, con cascada al borrar el expediente.
+- Dibujo mediante Pointer Events para ratón, dedo y lápiz; color, grosor, deshacer, borrado de trazos, zoom y desplazamiento. Vista de lectura ampliable. Conservar los campos por pieza existentes.
+- Máximos por dibujo de 500 trazos, 10000 puntos y 256 KiB, validados en servidor. Guardar documento y anotaciones en la misma transacción y con la revisión del expediente. Una operación consume las cuotas clínicas existentes. Conservar anotaciones cuando un cliente anterior guarde solo el documento.
+- La API devuelve anotaciones únicamente cuando la consulta de lectura las solicita. Conservar el formato existente de importación/exportación sin incorporar anotaciones.
+- Verificar Postgres local real con roles y dos consultorios, cambios concurrentes, límites, cascada y cuota. Comprobar en navegador persistencia tras recargar, creación, edición, dibujo, borrador, deshacer, zoom, desplazamiento y eventos de tacto/lápiz. Esta autorización cubre trabajo y migración locales.
+
 ## Despliegue completo a producción
 
 Cuando el usuario solicite un push o despliegue a producción, completar la publicación de todas las piezas necesarias del cambio autorizado y verificar su resultado.
@@ -178,3 +186,7 @@ Detener el servidor Next de este checkout antes de compilar si mantiene archivos
 - Límites administrativos: nombre de 1–100 caracteres, 50 correos por operación, 100 integrantes por consultorio y 20 consultorios creados por usuario. Son validaciones de tamaño del módulo; no sustituyen las cuotas clínicas pendientes.
 - Auditoría privada: actor, consultorio, operación, entidad y fecha; sin nombres, correos ni contenido clínico. Los identificadores de auditoría permanecen tras borrar el consultorio. Retención de producción pendiente en aws.
 - Pruebas requieren Node 24, Docker, Supabase CLI y Microsoft Edge en Windows. Los fixtures son sintéticos, las pruebas SQL usan rollback y las de navegador eliminan sus cuentas y consultorios. Las capturas en .local/ están ignoradas por Git.
+
+## Abonos por movimiento — 20 de noviembre de 2026
+
+Lote 2026-11-20-payment-installments. Cada movimiento admite hasta 100 abonos con fecha válida y cantidad positiva con hasta dos decimales, sin nuevo tratamiento ni costo. Guardar en el documento validado de Supabase, conservar en JSON y respetar 40000 bytes por expediente, revisión, permisos y cuotas existentes. Resta = costo - anticipo - suma de abonos, por movimiento y global; fechas dd/mm/yyyy con Hoy y consulta ordenada por fecha. Migración local compatible con expedientes anteriores. Verificar cálculos, recarga, edición, JSON y validación/aislamiento reales en Postgres y navegador.

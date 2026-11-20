@@ -2,6 +2,20 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "2026-11-20-payment-installments",
+      "reference": "Respuesta explícita a la solicitud del lote para abonos.",
+      "quote": "Autorizo el lote y los límites propuestos",
+      "scope": "Abonos anidados por movimiento con fecha y cantidad positiva de dos decimales; hasta 100 por movimiento y 40000 bytes por expediente. Migración y pruebas locales. Actualizar harness/project.md, feature_list.json, progress.md, session-handoff.md, harness/approvals.json, harness/evidence.md e harness/integrity.json.",
+      "reason": "Ampliar el esquema validado, cálculos y persistencia de pagos conservando permisos y cuotas."
+    },
+    {
+      "id": "2026-11-20-vector-odontogram",
+      "reference": "Respuesta del usuario a la solicitud asíncrona del lote de almacenamiento y pruebas del odontograma dibujable.",
+      "quote": "Autorizo el lote y los límites propuestos",
+      "scope": "Implementación y pruebas locales del odontograma vectorial con Odontograma.jpg como plantilla compartida. Tabla vinculada al expediente, guardado transaccional con control de revisión y cuotas existentes. Máximos 500 trazos, 10000 puntos y 256 KiB por dibujo. Actualizar harness/project.md, feature_list.json, progress.md, session-handoff.md, harness/approvals.json, harness/evidence.md e harness/integrity.json.",
+      "reason": "Registrar el nuevo flujo de anotaciones clínicas, sus límites y las verificaciones de aislamiento, persistencia y edición. El intercambio JSON conserva su alcance previo."
+    },
+    {
       "id": "2026-11-20-mobile-design-decision",
       "reference": "Mensaje del usuario en este chat posterior a la creación aprobada de harness/design-decisions.md.",
       "quote": "Optimiza el diseño para la vista en móvil, considerando que esa debe ser la prioridad, la vista en móvil, esta es una decisión fuerte.",

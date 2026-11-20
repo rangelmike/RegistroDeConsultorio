@@ -6,7 +6,7 @@ export function displayDate(value: string) {
   return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value.split("-").reverse().join("/") : value;
 }
 
-export function RecordDate({value,change}:{value:string;change:(value:string)=>void}) {
+export function RecordDate({value,change,required=false}:{value:string;change:(value:string)=>void;required?:boolean}) {
   const [text,setText]=useState(()=>displayDate(value));
   function update(input:HTMLInputElement) {
     const entered=input.value;
@@ -18,7 +18,7 @@ export function RecordDate({value,change}:{value:string;change:(value:string)=>v
     input.setCustomValidity(entered && !valid ? "Escribe una fecha válida con formato dd/mm/yyyy." : "");
     if(!entered || valid) change(iso);
   }
-  return <span className="date-entry"><input type="text" inputMode="numeric" placeholder="dd/mm/yyyy" maxLength={10} value={text} onChange={e=>update(e.currentTarget)}/>
+  return <span className="date-entry"><input required={required} type="text" inputMode="numeric" placeholder="dd/mm/yyyy" maxLength={10} value={text} onChange={e=>update(e.currentTarget)}/>
     <button type="button" className="text-button" onClick={e=>{
       const today=new Date();
       const formatted=[String(today.getDate()).padStart(2,"0"),String(today.getMonth()+1).padStart(2,"0"),today.getFullYear()].join("/");

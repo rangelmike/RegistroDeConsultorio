@@ -2,6 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parseClinicInput, validId } from '../lib/clinic-input.ts';
 import { readRecordFile, byteLimit } from '../lib/record-file.ts';
+import { emptyDrawing, fitsDrawing, touchesStroke, maxDrawingBytes } from '../lib/odontogram.ts';
+
+test('odontograma: límites acumulados y borrado por segmentos, extremos y puntos',()=>{
+  const stroke={id:crypto.randomUUID(),color:'#dc2626',width:2,points:[[10,10],[100,10]]};
+  assert.ok(fitsDrawing(emptyDrawing()));
+  assert.ok(fitsDrawing({template:'odontograma-v1',strokes:Array(500).fill(stroke)}));
+  assert.equal(fitsDrawing({template:'odontograma-v1',strokes:Array(501).fill(stroke)}),false);
+  assert.equal(fitsDrawing({template:'odontograma-v1',strokes:[{...stroke,points:Array(10001).fill([0,0])}]}),false);
+  assert.equal(fitsDrawing({template:'odontograma-v1',strokes:[{...stroke,id:'x'.repeat(maxDrawingBytes)}]}),false);
+  assert.ok(touchesStroke([50,10],stroke));
+  assert.ok(touchesStroke([102,10],stroke));
+  assert.equal(touchesStroke([50,25],stroke),false);
+  assert.ok(touchesStroke([10,10],{...stroke,points:[[10,10]]}));
+  assert.equal(touchesStroke([30,10],{...stroke,points:[[10,10]]}),false);
+});
 const id = '00000000-0000-4000-8000-000000000001';
 const jsonFile = data => new File([JSON.stringify(data)], 'sintetico.json');
 test('acepta JSON individual, listas y exportaciones versionadas', async () => {

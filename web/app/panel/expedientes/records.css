@@ -146,3 +146,7 @@
  .record-viewer .payments-table td:nth-child(2){font-weight:700;color:#3b275b}
  .record-viewer .payments-table td:nth-child(5){color:#553184;font-weight:700}
 }
+.payment-installments { margin: 12px 0; }
+.payment-installment { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,220px),1fr)); gap: 12px; align-items: end; margin: 12px 0; }
+.payment-installment label { display: grid; gap: 6px; min-width: 0; }
+.payment-installment input { width: 100%; min-width: 0; }

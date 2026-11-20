@@ -1,5 +1,27 @@
 # Evidencia de creación
 
+## Abonos por movimiento — 20 de noviembre de 2026
+
+- Aprobación explícita: «Autorizo el lote y los límites propuestos», registro 2026-11-20-payment-installments. Modificados los siete archivos autorizados: harness/project.md, feature_list.json, progress.md, session-handoff.md, harness/approvals.json, harness/evidence.md e harness/integrity.json.
+- Entorno Windows, Node 24, Supabase/Postgres 17 local y Edge headless; datos sintéticos. node harness/verify.mjs --product: salida 0. Pasaron lint, tipos, build, 6 pruebas unitarias, 169 pgTAP, concurrencia y navegador. node --test harness/verify.test.mjs: 8/8. git diff --check: salida 0.
+- Navegador: añadir abono 100.25, editar a 100.50, añadir/quitar otro de 20, comprobar restas 200.25/180.00/200.00; guardar, exportar, recargar, consultar fechas/cantidades y saldo global. Regresión JSON individual/múltiple, móviles, permisos, agenda y odontograma completa. Se ajustó un selector de prueba para distinguir la fecha del movimiento de la del abono.
+- SQL real: miembro guarda y recupera cantidad 25.50 mediante RPC; fechas imposibles, cero, negativos, más de dos decimales, fecha ausente, lista nula y más de 100 abonos rechazados. Se conservan pruebas de aislamiento, cuotas, revisión y compatibilidad anterior.
+- supabase migration up --local aplicó 20261120215020_payment_installments.sql. La versión final amplía el validador existente mediante CREATE OR REPLACE, sin tablas nuevas; se sincronizó en local tras simplificar un prototipo con función auxiliar, que fue retirado. supabase db advisors --local --type all --level warn --fail-on warn: salida 0, sin hallazgos. No se tocaron servicios remotos ni se hizo commit/push/deploy.
+
+
+## Odontograma vectorial — 20 de noviembre de 2026
+
+- Autorización 2026-11-20-vector-odontogram: «Autorizo el lote y los límites propuestos». Lote limitado a harness/project.md, feature_list.json, progress.md, session-handoff.md, harness/approvals.json, harness/evidence.md e harness/integrity.json. Sin cambios en instrucciones ni comandos de controles.
+- Entorno: Windows, Node 24, Next 16.4.6, PostgreSQL 17/Supabase en Docker local y Edge headless. Solo datos sintéticos y sesiones OAuth locales; no acredita Google real ni dispositivos físicos de lápiz/tacto.
+- Plantilla compartida web/public/odontograma-v1.jpg: Get-FileHash coincide con Odontograma.jpg aportado, SHA256 BE046EE3417C277FD0BA0043117612A9C7BF9FDFDE13A40DDE870925D86115DD. No se modificó la imagen.
+- supabase migration up --local aplicó 20261120192720_vector_odontogram.sql. Ajustes posteriores de las funciones sincronizados únicamente en local. Se reprodujo el archivo SQL definitivo completo dentro de BEGIN/ROLLBACK sobre la estructura anterior: salida 0, sin conservar cambios ni borrar datos. supabase migration list --local muestra nueve migraciones aplicadas.
+- npm.cmd --prefix web run test:db: salida 0, 159 comprobaciones pgTAP y concurrencia con conexiones independientes. Incluye validación de dibujo/esquema/límites, aislamiento, revocación, rechazo de acceso directo, cuotas, revisión obsoleta, conservación con clientes anteriores, cascada y reversión de la revisión documental ante un fallo simulado de anotaciones.
+- npm.cmd --prefix web run test:browser: salida 0. Alta, edición, guardado y recarga con trazos; borrador y deshacer; color/grosor; zoom/desplazamiento; ratón y eventos nativos de navegador de lápiz y tacto; móvil sin desbordamiento. Exportación conserva documentos sin trazos y reimportación individual abre una plantilla vacía. Se conserva la regresión completa de agenda, consultorios, permisos y cierre de sesión.
+- Capturas .local/odontogram-desktop.png y .local/odontogram-mobile.png inspeccionadas. Se limitó el ancho del lienzo en escritorio a 900 px para evitar ampliar excesivamente la plantilla. Las capturas son locales e ignoradas por Git.
+- Durante el desarrollo se corrigió una consulta agregada del fixture SQL, una referencia React actualizada durante render y la preparación de la prueba táctil/selector de etiqueta. Los controles correspondientes pasaron después de corregirlos.
+- node harness/verify.mjs --product: salida 0 en el código definitivo; lint, tipos, build, 6 pruebas unitarias, 159 pgTAP, concurrencia y navegador completos. node --test harness/verify.test.mjs: 8/8. node harness/verify.mjs: 82 archivos íntegros. supabase db advisors --local --type all --level warn --fail-on warn: salida 0, sin hallazgos. git diff --check pasó. vector-odontogram se cierra como done local, conservando los pendientes independientes de Google y producción.
+- No se ejecutaron migraciones remotas, commit, push ni despliegue. Para publicar se requiere también la nueva migración, siguiendo el procedimiento de producción existente. Google real permanece pendiente por decisión previa del usuario.
+
 ## Comandos del entorno local — 18 de noviembre de 2026
 
 - Autorización 2026-11-18-local-startup-commands. Se completó la sección Operación local de esta base en harness/project.md, reutilizando los comandos de Supabase y dev:local ya documentados.

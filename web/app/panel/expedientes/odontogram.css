@@ -1,0 +1,15 @@
+.odontogram-drawing { margin: 20px 0; min-width: 0; }
+.odontogram-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; padding: 12px; background: var(--soft); border-radius: 12px; }
+.odontogram-toolbar button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); background: white; color: var(--ink); border-radius: 7px; font: inherit; }
+.odontogram-tools,.odontogram-zoom { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.odontogram-toolbar button[aria-pressed=true] { background: var(--green); color: white; border-color: var(--green); }
+.odontogram-toolbar label { flex: 0 1 100px; }
+.odontogram-toolbar select { width: 100%; min-height: 44px; }
+.odontogram-zoom output { min-width: 55px; text-align: center; }
+.odontogram-hint { margin: 12px 0; font-size: 12px; }
+.odontogram-surface { display: block; width: 100%; max-width: 900px; margin-inline: auto; aspect-ratio: 643/511; border: 1px solid var(--line); background: white; border-radius: 8px; touch-action: none; user-select: none; }
+.odontogram-surface[data-tool=draw] { cursor: crosshair; }
+.odontogram-surface[data-tool=erase] { cursor: cell; }
+.odontogram-surface[data-tool=pan] { cursor: grab; }
+.odontogram-surface[data-tool=pan]:active { cursor: grabbing; }
+@media(max-width:600px) { .odontogram-tools { flex-basis: 100%; } .odontogram-tools button { flex: 1; } .odontogram-zoom { flex-basis: 100%; } }

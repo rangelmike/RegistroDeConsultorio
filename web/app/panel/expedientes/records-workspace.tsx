@@ -5,8 +5,9 @@ import { batchSize, readRecordFile } from "../../../lib/record-file";
 import type { Bundle, RecordData, Summary } from "../../../lib/dental-record";
 import { RecordEditor } from "./record-editor";
 import { RecordViewer } from "./record-viewer";
+import type { OdontogramDrawing } from "../../../lib/odontogram";
 
-type Stored = {document:RecordData;revision:number};
+type Stored = {document:RecordData;revision:number;drawing?:OdontogramDrawing};
 type Counts = {added:number;duplicates:number};
 type Download = {url:string;name:string};
 type Preview = {file:Bundle;counts:Counts};
@@ -66,7 +67,7 @@ export function RecordsWorkspace({clinic,fromAgenda}:{clinic:string;fromAgenda:b
     }
     const pending=agendaTarget.current;
     if(pending) {
-      api<Stored[]>("read",{ids:[pending.id]},false,controller.signal).then(([entry])=>{
+      api<Stored[]>("read",{ids:[pending.id],includeDrawing:true},false,controller.signal).then(([entry])=>{
         if(controller.signal.aborted) return;
         agendaTarget.current=null;
         if(pending.edit) setEditor(entry); else setViewing(entry);
@@ -97,16 +98,16 @@ export function RecordsWorkspace({clinic,fromAgenda}:{clinic:string;fromAgenda:b
     setPreview(null);setDeleting(null);setError("");setMessage("");setDownloads([]);
     if(view==="consulta") restart();
   }
-  async function save(document:RecordData) {
+  async function save(document:RecordData,drawing:OdontogramDrawing) {
     await perform(async()=>{
       const revision=editor?.revision ?? 0;
-      await api(revision?"update":"import",{version:1,expedientes:[document],...(revision?{revision}:{})});
+      await api(revision?"update":"import",{version:1,expedientes:[document],drawing,...(revision?{revision}:{})});
       switchTo("consulta");setSearch("");setMessage(revision?"Cambios guardados.":"Expediente creado.");
     });
   }
   function openRecord(id:string,show:(entry:Stored)=>void) {
     void perform(async()=>{
-      const [entry]=await api<Stored[]>("read",{ids:[id]});
+      const [entry]=await api<Stored[]>("read",{ids:[id],includeDrawing:true});
       setPreview(null);setDeleting(null);show(entry);
     });
   }
@@ -169,7 +170,7 @@ export function RecordsWorkspace({clinic,fromAgenda}:{clinic:string;fromAgenda:b
       const result=await api<Counts>("import",preview.file,true);
       const imported=preview.file.expedientes;
       const entry=imported.length===1
-        ? (await api<Stored[]>("read",{ids:[imported[0].id]},true))[0]
+        ? (await api<Stored[]>("read",{ids:[imported[0].id],includeDrawing:true},true))[0]
         : null;
       switchTo("consulta");setSearch("");
       if(entry) setViewing(entry);
@@ -210,8 +211,8 @@ export function RecordsWorkspace({clinic,fromAgenda}:{clinic:string;fromAgenda:b
         <button className="button secondary" disabled={busy} onClick={()=>setDeleting(null)}>Cancelar eliminación</button></div></div>}
     </section>}
     {downloads.length>0 && <div className="record-downloads">{downloads.map(d=><a className="button secondary" key={d.url} href={d.url} download={d.name}>Descargar {d.name}</a>)}</div>}
-    {editor && <RecordEditor key={editor.document.id} initial={editor.document} editing={editor.revision>0} busy={busy} save={save} cancel={()=>switchTo("consulta")}/>}
-    {viewing && <RecordViewer doc={viewing.document} back={()=>setViewing(null)} edit={()=>{setEditor(viewing);setViewing(null);}}/>}
+    {editor && <RecordEditor key={editor.document.id} initial={editor.document} initialDrawing={editor.drawing} editing={editor.revision>0} busy={busy} save={save} cancel={()=>switchTo("consulta")}/>}
+    {viewing && <RecordViewer doc={viewing.document} drawing={viewing.drawing} back={()=>setViewing(null)} edit={()=>{setEditor(viewing);setViewing(null);}}/>}
     {!viewing && (!editor || section==="crear") && <section className="settings-card record-import"><h2>Importar expedientes</h2>
       <p>Elige un JSON con un expediente o un lote de hasta 50 (2 MiB). Podrás revisar el contenido antes de guardarlo.</p>
       <label>Archivo JSON<input type="file" accept=".json,application/json" disabled={busy} onChange={e=>{chooseFile(e.target.files?.[0]);e.target.value="";}}/></label>

@@ -2,6 +2,15 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path=public,extensions;
 select no_plan();
+select ok(clinic_private.valid_dental_record('{"id":"00000000-0000-4000-8000-000000000001","nombre":"A","telefono":"0","evolucion":[{"abonos":[{"fecha":"2026-11-20","cantidad":"0.01"}]}]}'),'valid installment');
+select ok(not clinic_private.valid_dental_record(jsonb_build_object('id','00000000-0000-4000-8000-000000000001','nombre','A','telefono','0','evolucion',jsonb_build_array(jsonb_build_object('abonos',bad)))),label)
+from (values ('[{"fecha":"2026-02-30","cantidad":"1"}]'::jsonb,'reject impossible installment date'),
+ ('[{"fecha":"2026-11-20","cantidad":"0"}]','reject zero installment'),
+ ('[{"fecha":"2026-11-20","cantidad":"-1"}]','reject negative installment'),
+ ('[{"fecha":"2026-11-20","cantidad":"1.001"}]','reject excess decimals'),
+ ('[{"cantidad":"1"}]','date required'),
+ ('null','reject null installments'),
+ ((select jsonb_agg(jsonb_build_object('fecha','2026-11-20','cantidad','1')) from generate_series(1,101)),'installment count bounded')) checks(bad,label);
 create temp table dental_people(n int, id uuid, email text);
 insert into dental_people select n,gen_random_uuid(),'dental'||n||'@example.test' from generate_series(1,3)n;
 insert into auth.users(id,email,email_confirmed_at) select id,email,now() from dental_people;
@@ -36,6 +45,8 @@ select is((select minute_used from clinic_private.clinical_usage where scope='us
 set local role authenticated;
 select pg_temp.dental_actor(2);
 select lives_ok($$select pg_temp.batch('update',jsonb_build_array(doc || '{"campos":{"sexo":"Femenino"}}')) from dental_fixture$$,'clinic member can edit');
+select is((select pg_temp.batch('update',jsonb_build_array(doc || '{"evolucion":[{"total":"100","abonos":[{"fecha":"2026-11-20","cantidad":"25.50"}]}]}'),2)->>'added' from dental_fixture),'0','member saves nested installments');
+select is((select public.dental_operation(a,'read',jsonb_build_object('ids',jsonb_build_array(doc->>'id')))->0->'document'->'evolucion'->0->'abonos'->0->>'cantidad' from dental_fixture),'25.50','installments persist in real database');
 select is((select pg_temp.batch('update',jsonb_build_array(doc),1)->>'message' from dental_fixture),'Record changed','stale edit cannot overwrite');
 select throws_ok($$select public.dental_operation(b,'list','{}') from dental_fixture$$,'42501','Access denied','other clinic invisible');
 select pg_temp.dental_actor(3);

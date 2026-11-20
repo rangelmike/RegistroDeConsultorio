@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { RecordDate } from "./record-date";
-import { accountFields, arches, groups, toothFields, type Field, type RecordData } from "../../../lib/dental-record";
+import { OdontogramCanvas } from "./odontogram-canvas";
+import { emptyDrawing, type OdontogramDrawing } from "../../../lib/odontogram";
+import { accountFields, arches, groups, toothFields, paymentTotals, type Installment, type Field, type RecordData } from "../../../lib/dental-record";
 
 type Values = Record<string,string>;
 function withValue(values: Values = {}, key: string, value: string) {
@@ -11,25 +13,29 @@ function withValue(values: Values = {}, key: string, value: string) {
   return next;
 }
 
-function Fields({fields,values={},change,defaultValue}:{fields:Field[];values?:Values;change:(key:string,value:string)=>void;defaultValue?:string}) {
+function Fields({fields,values={},change,defaultValue}:{fields:Field[];values?:Record<string,unknown>;change:(key:string,value:string)=>void;defaultValue?:string}) {
   return <div className="record-fields">{fields.map(field=>{
-    const props = { value:values[field.key] ?? defaultValue ?? "", onChange:(e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)=>change(field.key,e.target.value) };
+    const value=typeof values[field.key]==="string" ? values[field.key] as string : defaultValue ?? "";
+    const props = { value, onChange:(e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>)=>change(field.key,e.target.value) };
     return <label key={field.key}>{field.label}
       {field.options ? <select {...props}>{!defaultValue && <option value="">Sin registrar</option>}{field.options.map(v=><option key={v}>{v}</option>)}</select> :
-        field.type==="date" ? <RecordDate value={values[field.key] ?? ""} change={v=>change(field.key,v)}/> :
+        field.type==="date" ? <RecordDate value={value} change={v=>change(field.key,v)}/> :
         field.type==="textarea" ? <textarea {...props} rows={3} maxLength={4000}/> :
         <input {...props} type={field.type==="money"?"number":field.type ?? "text"} min={0} step={field.type==="money"?"0.01":undefined} max={field.type==="number"?9999:undefined} maxLength={4000}/>}
     </label>;
   })}</div>;
 }
 
-export function RecordEditor({initial,editing,busy,save,cancel}:{initial:RecordData;editing:boolean;busy:boolean;save:(record:RecordData)=>Promise<void>;cancel:()=>void}) {
+export function RecordEditor({initial,initialDrawing,editing,busy,save,cancel}:{initial:RecordData;initialDrawing?:OdontogramDrawing;editing:boolean;busy:boolean;save:(record:RecordData,drawing:OdontogramDrawing)=>Promise<void>;cancel:()=>void}) {
   const [doc,setDoc] = useState(initial);
+  const [drawing,setDrawing] = useState(initialDrawing ?? emptyDrawing);
   const [tooth,setTooth] = useState("11");
   const entries = doc.evolucion ?? [];
   const [rowKeys,setRowKeys]=useState(()=>entries.map((_,i)=>String(i)));
-  const totals = ["total","anticipo"].map(k=>entries.reduce((n,row)=>n+Math.round(Number(row[k]||0)*100),0)/100);
-  const balance = (row:Values) => (Math.round(Number(row.total||0)*100)-Math.round(Number(row.anticipo||0)*100))/100;
+  const totals = entries.reduce((sum,row)=>{const t=paymentTotals(row);return [sum[0]+t.cost,sum[1]+t.advance,sum[2]+t.installments,sum[3]+t.balance];},[0,0,0,0]);
+  function changeInstallments(index:number,abonos:Installment[]) {
+    setDoc({...doc,evolucion:entries.map((row,i)=>i===index?{...row,abonos}:row)});
+  }
   function saveRecord() {
     const campos = {...doc.campos};
     for (const group of groups) {
@@ -38,7 +44,7 @@ export function RecordEditor({initial,editing,busy,save,cancel}:{initial:RecordD
       }
     }
     void save({...doc,nombre:doc.nombre.trim(),telefono:doc.telefono.trim(),campos,
-      ...(doc.evolucion ? {evolucion:entries.map(row=>{const updated={...row};delete updated.resta;return updated;})} : {})});
+      ...(doc.evolucion ? {evolucion:entries.map(row=>{const updated={...row};delete updated.resta;return updated;})} : {})},drawing);
   }
   function changeTooth(key:string,value:string) {
     const next={...doc.odontograma};
@@ -57,6 +63,7 @@ export function RecordEditor({initial,editing,busy,save,cancel}:{initial:RecordD
         <Fields fields={group.fields} values={doc.campos} defaultValue={group.defaultValue} change={(key,v)=>setDoc({...doc,campos:withValue(doc.campos,key,v)})}/>
       </details>)}
       <details className="clinical-section"><summary>Odontogramas y presupuesto por pieza</summary>
+        <OdontogramCanvas value={drawing} change={setDrawing} disabled={busy}/>
         {arches.map(arch=><fieldset key={arch.title} className="arch"><legend>{arch.title}</legend>
           {arch.rows.map((row,i)=><div className="tooth-row" key={i}>{row.map(n=><button type="button" key={n} aria-label={"Pieza "+n} aria-pressed={n===tooth} data-marked={!!doc.odontograma?.[n]} onClick={()=>setTooth(n)}>{n}</button>)}</div>)}
         </fieldset>)}
@@ -64,12 +71,20 @@ export function RecordEditor({initial,editing,busy,save,cancel}:{initial:RecordD
       </details>
       <details className="clinical-section"><summary>Evolución y estado de cuenta</summary>
         {entries.map((row,i)=><fieldset className="account-row" key={rowKeys[i]}><legend>Movimiento {i+1}</legend>
-          <Fields fields={accountFields} values={row} change={(key,v)=>setDoc({...doc,evolucion:entries.map((r,j)=>i===j?withValue(r,key,v):r)})}/>
-          <p>Resta: <output>{balance(row).toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2})}</output></p>
+          <Fields fields={accountFields} values={row} change={(key,v)=>setDoc({...doc,evolucion:entries.map((r,j)=>i===j?{...r,[key]:v || undefined}:r)})}/>
+          <div className="payment-installments"><h4>Abonos del movimiento {i+1}</h4>
+            {(row.abonos ?? []).map((abono,j)=><div className="payment-installment" key={`${j}-${abono.fecha}`}>
+              <label>Fecha del abono {j+1}<RecordDate required value={abono.fecha} change={fecha=>changeInstallments(i,row.abonos!.map((a,k)=>k===j?{...a,fecha}:a))}/></label>
+              <label>Cantidad del abono {j+1}<input required type="number" min="0.01" step="0.01" max="999999999999.99" value={abono.cantidad} onChange={e=>changeInstallments(i,row.abonos!.map((a,k)=>k===j?{...a,cantidad:e.target.value}:a))}/></label>
+              <button type="button" className="text-danger" onClick={()=>changeInstallments(i,row.abonos!.filter((_,k)=>k!==j))}>Quitar abono {j+1}</button>
+            </div>)}
+            <button type="button" className="button secondary" disabled={(row.abonos?.length ?? 0)>=100} onClick={()=>changeInstallments(i,[...(row.abonos ?? []),{fecha:"",cantidad:""}])}>Añadir abono</button>
+          </div>
+          <p>Resta: <output>{(paymentTotals(row).balance/100).toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2})}</output></p>
           <button type="button" className="text-danger" onClick={()=>{setDoc({...doc,evolucion:entries.filter((_,j)=>j!==i)});setRowKeys(rowKeys.filter((_,j)=>j!==i));}}>Quitar movimiento {i+1}</button>
         </fieldset>)}
         <button type="button" className="button secondary" disabled={entries.length>=300} onClick={()=>{setDoc({...doc,evolucion:[...entries,{}]});setRowKeys([...rowKeys,crypto.randomUUID()]);}}>Añadir movimiento</button>
-        {entries.length>0 && <dl className="account-totals">{["Costo total","Anticipos","Resta total"].map((label,i)=><div key={label}><dt>{label}</dt><dd>{(i===2?totals[0]-totals[1]:totals[i]).toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2})}</dd></div>)}</dl>}
+        {entries.length>0 && <dl className="account-totals">{["Costo total","Anticipos","Abonos","Resta total"].map((label,i)=><div key={label}><dt>{label}</dt><dd>{(totals[i]/100).toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2})}</dd></div>)}</dl>}
       </details>
       <div className="record-actions"><button className="button primary">{editing?"Guardar cambios":"Crear expediente"}</button>
         <button type="button" className="button secondary" onClick={cancel}>Cancelar</button></div>

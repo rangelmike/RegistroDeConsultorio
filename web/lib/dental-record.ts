@@ -1,11 +1,19 @@
 export type Field = { key: string; label: string; type?: string; options?: string[] };
+export type Installment = {fecha:string;cantidad:string};
+export type PaymentMovement = {fecha?:string;tratamiento?:string;total?:string;anticipo?:string;resta?:string;firma?:string;abonos?:Installment[]};
+export function paymentTotals(row:PaymentMovement) {
+  const cost=Math.round(Number(row.total || 0)*100);
+  const advance=Math.round(Number(row.anticipo || 0)*100);
+  const installments=(row.abonos ?? []).reduce((sum,item)=>sum+Math.round(Number(item.cantidad || 0)*100),0);
+  return {cost,advance,installments,balance:cost-advance-installments};
+}
 export type RecordData = {
   id: string;
   nombre: string;
   telefono: string;
   campos?: Record<string, string>;
   odontograma?: Record<string, Record<string, string>>;
-  evolucion?: Record<string, string>[];
+  evolucion?: PaymentMovement[];
 };
 export type Summary = Pick<RecordData, "id" | "nombre" | "telefono"> & { revision: number };
 export type Bundle = { version: 1; expedientes: RecordData[] };
